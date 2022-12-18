@@ -3,7 +3,7 @@
 Specifit Mobile Application.  
 
 ## How to Run:  
-- Install Android or iOS Simulator (can use Android Studio) then Install Expo Go on the phone
+- Install Android (can use Android Studio) or iOS Simulator then Install Expo Go on the phone
 - npm install
 - Run the simulator
 - npm start
