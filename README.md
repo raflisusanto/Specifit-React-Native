@@ -6,6 +6,7 @@ Specifit Mobile Application.
 - Install Android (can use Android Studio) or iOS Simulator then Install Expo Go on the phone
 - npm install
 - Run the simulator
-- npm start
+- npx expo start (for first time)
+- npm start (if not first time)
 
 © Created for TUBES RPL IMPAL 2022
