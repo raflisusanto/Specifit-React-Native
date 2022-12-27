@@ -1,20 +1,31 @@
 import { Pressable, Image, View, Text, StyleSheet } from "react-native";
 import Card from "./Card";
 import COLORS from "../../../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
-function ProgramCardProgress({ image, title, categories, percentage}) {
+function ProgramCardProgress({ id, image, title, categories, percentage }) {
+  const navigation = useNavigation();
+  function onPressHandler() {
+    navigation.navigate("ProgramDetail", {
+      programId: id,
+    });
+  }
   return (
-    <Pressable style={styles.containerStyle}>
+    <Pressable style={styles.containerStyle} onPress={onPressHandler}>
       <Card style={styles.cardStyle}>
         <Image
-          source={image}
+          source={{
+            uri: image,
+          }}
           style={styles.imageContainer}
         ></Image>
         <View style={styles.workoutDetailsContainer}>
           <Text style={styles.titleText}>{title}</Text>
           <Text style={styles.categoryText}>{categories.join(", ")}</Text>
           <View style={styles.progressContainer}>
-            <View style={[styles.progressBar, {width: `${percentage + '%'}`}]}></View>
+            <View
+              style={[styles.progressBar, { width: `${percentage + "%"}` }]}
+            ></View>
           </View>
           <Text style={styles.progressText}>{percentage}%</Text>
         </View>

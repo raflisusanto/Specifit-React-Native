@@ -1,12 +1,24 @@
 import Card from "./Card";
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-function ProgramCard({ image, categories, title, time }) {
+function ProgramCard({ id, image, categories, title, time }) {
+  const navigation = useNavigation();
+  function onPressHandler() {
+    navigation.navigate("ProgramDetail", {
+      programId: id,
+    });
+  }
   return (
-    <Pressable style={styles.containerStyle}>
+    <Pressable style={styles.containerStyle} onPress={onPressHandler}>
       <Card style={styles.cardStyle}>
-        <Image source={image} style={styles.imageStyle}></Image>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.imageStyle}
+        ></Image>
         <View style={styles.detailContainer}>
           <View>
             <Text style={styles.categoriesStyles}>{categories.join(", ")}</Text>
@@ -14,7 +26,7 @@ function ProgramCard({ image, categories, title, time }) {
           <Text style={styles.titleStyle}>{title}</Text>
           <View style={styles.descriptionContainer}>
             <Ionicons name="time-outline" style={styles.iconStyle}></Ionicons>
-            <Text style={styles.descriptionStyle}>{time}</Text>
+            <Text style={styles.descriptionStyle}>{time} hari</Text>
           </View>
         </View>
       </Card>

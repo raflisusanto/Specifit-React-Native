@@ -2,15 +2,29 @@ import Card from "./Card";
 import { View, Image, Pressable, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
-function WorkoutCard({ image, title, category, time, count }) {
+function WorkoutCard({ id, image, title, categories, time, count }) {
+  const navigation = useNavigation();
+
+  function onPressHandler() {
+    navigation.navigate("WorkoutDetail", {
+      workoutId: id,
+    });
+  }
+
   return (
-    <Pressable style={styles.containerStyle}>
+    <Pressable onPress={onPressHandler} style={styles.containerStyle}>
       <Card style={styles.cardStyle}>
-        <Image source={image} style={styles.imageContainer}></Image>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.imageContainer}
+        ></Image>
         <View style={styles.workoutDetailsContainer}>
           <Text style={styles.titleText}>{title}</Text>
-          <Text style={styles.categoryText}>{category}</Text>
+          <Text style={styles.categoryText}>{categories.join(", ")}</Text>
           <View style={styles.descriptionContainer}>
             <Ionicons
               name="time-outline"

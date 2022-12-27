@@ -1,11 +1,25 @@
 import Card from "./Card";
 import { Pressable, Image, View, StyleSheet, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-function TipsCard({ image, title }) {
+function TipsCard({ id, image, title }) {
+  const navigation = useNavigation();
+
+  function onPressHandler() {
+    navigation.navigate("Tips", {
+      tipsId: id,
+    });
+  }
+
   return (
-    <Pressable style={styles.containerStyle}>
+    <Pressable style={styles.containerStyle} onPress={onPressHandler}>
       <Card style={styles.cardStyle}>
-        <Image source={image} style={styles.imageStyle}></Image>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.imageStyle}
+        ></Image>
         <View style={styles.titleContainer}>
           <Text style={styles.titleStyle}>{title}</Text>
         </View>
