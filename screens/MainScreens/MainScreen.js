@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import WorkoutScreen from "./WorkoutScreen";
-import HomeScreen from "./HomeScreen";
+import HomeNavigation from "./HomeNavigation";
 import COLORS from "../../constants/colors";
 import ProfileNavigation from "./ProfileNavigation";
+import WorkoutNavigation from "./WorkoutNavigation";
 
 function MainScreen() {
   const Tab = createBottomTabNavigator();
@@ -15,9 +15,9 @@ function MainScreen() {
 
           color = focused ? COLORS.primary : "#C8C8C8";
           size = 24;
-          if (route.name === "Home") {
+          if (route.name === "HomeStack") {
             iconName = "home";
-          } else if (route.name === "Workout") {
+          } else if (route.name === "WorkoutStack") {
             iconName = "weight-lifter";
           } else if (route.name === "ProfileStack") {
             return <Ionicons name="person" size={size} color={color} />;
@@ -38,8 +38,8 @@ function MainScreen() {
         tabBarStyle: { height: 55 },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
-      <Tab.Screen name="Workout" component={WorkoutScreen} options={{headerShown: false}} />
+      <Tab.Screen name="HomeStack" component={HomeNavigation} options={{headerShown: false, tabBarLabel:"Home"}} />
+      <Tab.Screen name="WorkoutStack" component={WorkoutNavigation} options={{headerShown: false, tabBarLabel:"Workout"}} />
       <Tab.Screen name="ProfileStack" component={ProfileNavigation} options={{headerShown: false, tabBarLabel:"Profile"}}/>
     </Tab.Navigator>
   );

@@ -1,13 +1,14 @@
 import { ScrollView, Text, View, Image, StyleSheet } from "react-native";
-import ButtonNoOutline from "../../components/ui/buttons/ButtonNoOutline";
-import WorkoutCard from "../../components/ui/cards/WorkoutCard";
-import ProgramCard from "../../components/ui/cards/ProgramCard";
+import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
+import WorkoutCard from "../../../components/ui/cards/WorkoutCard";
+import ProgramCard from "../../../components/ui/cards/ProgramCard";
+import { PROGRAMS, WORKOUTS } from "../../../data/dummy-data";
 
-function WorkoutScreen() {
+function WorkoutScreen({ navigation }) {
   return (
     <>
       <Image
-        source={require("../../assets/images/element_workout.png")}
+        source={require("../../../assets/images/element_workout.png")}
         style={styles.staticImage}
       ></Image>
       <Text
@@ -31,30 +32,23 @@ function WorkoutScreen() {
               <ButtonNoOutline
                 text="Lihat Semua"
                 containerStyle={{ marginLeft: "auto" }}
-                textStyle={{fontFamily: 'OpenSans_600SemiBold', fontSize: 12}}
+                textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
+                onPress={() => navigation.navigate("WorkoutList")}
               />
             </View>
-            <WorkoutCard
-              image={require("../../assets/images/workout_1.png")}
-              title="Auto Sixpath by Rapli"
-              category="Abs"
-              time="15 Menit"
-              count="4"
-            />
-            <WorkoutCard
-              image={require("../../assets/images/workout_2.png")}
-              title="Latihan Lengan"
-              category="Arms"
-              time="15 menit"
-              count="4"
-            />
-            <WorkoutCard
-              image={require("../../assets/images/workout_3.png")}
-              title="Penghilang Menbubs"
-              category="Chest"
-              time="15 menit"
-              count="4"
-            />
+            {WORKOUTS.slice(0, 3).map((workout) => {
+              return (
+                <WorkoutCard
+                  id={workout.id}
+                  image={workout.img}
+                  title={workout.title}
+                  categories={workout.ctgList}
+                  time={workout.est}
+                  count={workout.workoutList.length}
+                  key={workout.id}
+                />
+              );
+            })}
           </View>
         </View>
         <View style={{ marginTop: 10, backgroundColor: "white" }}>
@@ -66,21 +60,22 @@ function WorkoutScreen() {
               <ButtonNoOutline
                 text="Lihat Semua"
                 containerStyle={{ marginLeft: "auto" }}
-                textStyle={{fontFamily: 'OpenSans_600SemiBold', fontSize: 12}}
+                textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
+                onPress={() => navigation.navigate("ProgramList")}
               />
             </View>
-            <ProgramCard
-              image={require("../../assets/images/program_1.png")}
-              title="Menurunkan Berat Badan"
-              time="7 Hari"
-              categories={["Lose Weight"]}
-            />
-            <ProgramCard
-              image={require("../../assets/images/program_2.png")}
-              title="Program Strength Training"
-              time="7 Hari"
-              categories={["Lose Weight", "Strength"]}
-            />
+            {PROGRAMS.slice(0, 3).map((program) => {
+              return (
+                <ProgramCard
+                  id={program.id}
+                  image={program.img}
+                  title={program.title}
+                  time={program.workoutList.length}
+                  categories={program.ctgList}
+                  key={program.id}
+                />
+              );
+            })}
           </View>
         </View>
       </ScrollView>

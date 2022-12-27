@@ -1,12 +1,21 @@
 import { Text, Image, View, ScrollView, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import ButtonNoOutline from "../../components/ui/buttons/ButtonNoOutline";
-import COLORS from "../../constants/colors";
-import Card from "../../components/ui/cards/Card";
-import Button from "../../components/ui/buttons/Button";
-import CategoryButton from "../../components/ui/buttons/CategoryButton";
-import ProgramCardProgress from "../../components/ui/cards/ProgramCardProgress";
-import TipsCard from "../../components/ui/cards/TipsCard";
+import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
+import COLORS from "../../../constants/colors";
+import Card from "../../../components/ui/cards/Card";
+import Button from "../../../components/ui/buttons/Button";
+import CategoryButton from "../../../components/ui/buttons/CategoryButton";
+import ProgramCardProgress from "../../../components/ui/cards/ProgramCardProgress";
+import TipsCard from "../../../components/ui/cards/TipsCard";
+import { PROGRAMS, TIPS } from "../../../data/dummy-data";
+
+function sum(arr) {
+  let sum = 0;
+  arr.forEach((num) => {
+    sum += num;
+  });
+  return sum;
+}
 
 function HomeScreen() {
   const cardText = `Lengkapi Datamu dan\ndapatkan Rekomendasi\nProgram dari Kami`;
@@ -14,7 +23,7 @@ function HomeScreen() {
   return (
     <>
       <Image
-        source={require("../../assets/images/element_home.png")}
+        source={require("../../../assets/images/element_home.png")}
         style={styles.staticImage}
       ></Image>
       <View>
@@ -69,11 +78,11 @@ function HomeScreen() {
           style={{ marginHorizontal: 20, marginTop: 10, overflow: "hidden" }}
         >
           <Image
-            source={require("../../assets/images/element_card_form_1.png")}
+            source={require("../../../assets/images/element_card_form_1.png")}
             style={styles.cardImagesRight}
           ></Image>
           <Image
-            source={require("../../assets/images/element_card_form_2.png")}
+            source={require("../../../assets/images/element_card_form_2.png")}
             style={styles.cardImagesLeft}
           ></Image>
           <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 14 }}>
@@ -95,11 +104,6 @@ function HomeScreen() {
               <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 16 }}>
                 Pilih dari Kategori
               </Text>
-              <ButtonNoOutline
-                text="Lihat Semua"
-                containerStyle={{ marginLeft: "auto" }}
-                textStyle={{fontFamily: 'OpenSans_600SemiBold', fontSize: 12}}
-              />
             </View>
             <ScrollView
               horizontal={true}
@@ -107,23 +111,23 @@ function HomeScreen() {
               showsHorizontalScrollIndicator={false}
             >
               <CategoryButton
-                image={require("../../assets/images/ctg_1.png")}
+                image={require("../../../assets/images/ctg_1.png")}
                 category="Legs"
               />
               <CategoryButton
-                image={require("../../assets/images/ctg_2.png")}
+                image={require("../../../assets/images/ctg_2.png")}
                 category="Arms"
               />
               <CategoryButton
-                image={require("../../assets/images/ctg_3.png")}
+                image={require("../../../assets/images/ctg_3.png")}
                 category="Fat Burning"
               />
               <CategoryButton
-                image={require("../../assets/images/ctg_4.png")}
+                image={require("../../../assets/images/ctg_4.png")}
                 category="Running"
               />
               <CategoryButton
-                image={require("../../assets/images/ctg_5.png")}
+                image={require("../../../assets/images/ctg_5.png")}
                 category="Yoga"
               />
             </ScrollView>
@@ -138,21 +142,28 @@ function HomeScreen() {
               <ButtonNoOutline
                 text="Lihat Semua"
                 containerStyle={{ marginLeft: "auto" }}
-                textStyle={{fontFamily: 'OpenSans_600SemiBold', fontSize: 12}}
+                textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
               />
             </View>
-            <ProgramCardProgress
-              image={require("../../assets/images/program_1.png")}
-              title="Menurunkan Berat Badan"
-              categories={["Lose Weight", "Strength"]}
-              percentage={50}
-            />
-            <ProgramCardProgress
-              image={require("../../assets/images/program_2.png")}
-              title="Program Strength Training"
-              categories={["Strength"]}
-              percentage={30}
-            />
+            <View>
+              {PROGRAMS.slice(0, 4).map((program) => {
+                return (
+                  program.status && (
+                    <ProgramCardProgress
+                      id={program.id}
+                      image={program.img}
+                      title={program.title}
+                      categories={program.ctgList}
+                      percentage={
+                        (sum(program.statusDayList) / program.ctgList.length) *
+                        10
+                      }
+                      key={program.id}
+                    />
+                  )
+                );
+              })}
+            </View>
           </View>
         </View>
         <View style={styles.sectionContainer}>
@@ -164,7 +175,7 @@ function HomeScreen() {
               <ButtonNoOutline
                 text="Lihat Semua"
                 containerStyle={{ marginLeft: "auto" }}
-                textStyle={{fontFamily: 'OpenSans_600SemiBold', fontSize: 12}}
+                textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
               />
             </View>
             <ScrollView
@@ -172,14 +183,11 @@ function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               style={{ marginRight: -20 }}
             >
-              <TipsCard
-                image={require("../../assets/images/tips_1.png")}
-                title="Kapan Waktu yang Tepat untuk Berolahraga?"
-              />
-              <TipsCard
-                image={require("../../assets/images/tips_2.png")}
-                title="Olahraga untuk tidur yang Lebih Nyenyak"
-              />
+              {TIPS.slice(0, 5).map((tip) => {
+                return (
+                  <TipsCard id={tip.id} image={tip.img} title={tip.title} key={tip.id} />
+                );
+              })}
             </ScrollView>
           </View>
         </View>
