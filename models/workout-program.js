@@ -17,6 +17,14 @@ class WorkoutProgram {
         }
         return statusDayList;
     }
+
+    setStatusDay(idx, val) {
+        this.statusDayList[idx] = val;
+    }
+
+    setStatus(status) {
+        this.status = status;
+    }
 }
 
 export default WorkoutProgram;

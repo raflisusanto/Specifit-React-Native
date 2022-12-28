@@ -1,15 +1,14 @@
-import { PROGRAMS } from "../../../../data/dummy-data";
+import { PROGRAMS } from "../../../data/dummy-data";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import Button from "../../../../components/ui/buttons/Button";
+import Button from "../../../components/ui/buttons/Button";
 import ReadMore from "@fawazahmed/react-native-read-more";
-import COLORS from "../../../../constants/colors";
-import DayButton from "../../../../components/ui/buttons/DayButton";
-import Card from "../../../../components/ui/cards/Card";
-import WorkoutScheduleCard from "../../../../components/ui/cards/WorkoutScheduleCard";
+import COLORS from "../../../constants/colors";
+import DayButton from "../../../components/ui/buttons/DayButton";
+import Card from "../../../components/ui/cards/Card";
+import WorkoutScheduleCard from "../../../components/ui/cards/WorkoutScheduleCard";
 
-function ProgramDetail({ route }) {
+function WorkoutDetail({ route }) {
   const programId = route.params.programId;
   const selectedProgram = PROGRAMS.find((program) => program.id === programId);
   const [isActiveIndex, setIsActiveIndex] = useState(0);
@@ -17,16 +16,6 @@ function ProgramDetail({ route }) {
 
   function onPressHandler(activeIdx) {
     setIsActiveIndex(activeIdx);
-  }
-
-  function addButtonHandler() {
-    const programStatus = selectedProgram.status;
-    if (programStatus) {
-      selectedProgram.setStatus(false);
-    } else {
-      selectedProgram.setStatus(true);
-    }
-    // Tetep harus tambah context utk rerender componentnya
   }
 
   return (
@@ -77,6 +66,7 @@ function ProgramDetail({ route }) {
                   />
                 );
               })}
+              <Button style={styles.buttonStyle} text="Selesai Hari Ini" />
             </View>
           </View>
         </View>
@@ -91,7 +81,7 @@ function ProgramDetail({ route }) {
           }}
         >
           <Image
-            source={require("../../../../assets/images/element_card_diet.png")}
+            source={require("../../../assets/images/element_card_diet.png")}
             style={styles.cardImagesRight}
           ></Image>
           <Text
@@ -117,33 +107,11 @@ function ProgramDetail({ route }) {
           />
         </Card>
       </ScrollView>
-      <View style={styles.buttonSection}>
-        <View style={styles.buttonContainer}>
-          <Button
-            style={selectedProgram.status ? styles.buttonAddedStyle : styles.buttonStyle}
-            text={
-              selectedProgram.status
-                ? "Program Sukses Ditambah"
-                : "Coba Program"
-            }
-            showIcon={true}
-            iconName={selectedProgram.status ? "check-circle" : "add"}
-            onPress={addButtonHandler}
-            iconStyle={selectedProgram.status && styles.iconAddedStyle}
-            textStyle={selectedProgram.status && styles.textAddedStyle}
-          />
-          <Ionicons
-            name="bookmark-outline"
-            size={20}
-            style={{ marginLeft: "auto", marginBottom: -14 }}
-          />
-        </View>
-      </View>
     </View>
   );
 }
 
-export default ProgramDetail;
+export default WorkoutDetail;
 
 const styles = StyleSheet.create({
   titleStyle: {
@@ -186,49 +154,24 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   buttonStyle: {
-    position: "relative",
+    elevation: 2,
     height: 30,
-    borderRadius: 6,
-    marginTop: 16,
-    width: "220%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingLeft: 20,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    marginHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    borderRadius: 4,
     justifyContent: "center",
-    marginBottom: 16,
-  },
-  buttonSection: {
-    backgroundColor: "white",
-    elevation: 10,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  buttonAddedStyle: {
-    position: "relative",
-    height: 30,
-    borderRadius: 6,
-    marginTop: 16,
-    width: "138%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
     alignItems: "center",
-    paddingLeft: 20,
-    backgroundColor: 'white',
-    borderColor: COLORS.success,
+    marginTop: 20,
     borderWidth: 1,
+    borderColor: COLORS.primary,
   },
-  iconAddedStyle: {
-    color: COLORS.success,
-  },
-  textAddedStyle: {
-    color: COLORS.success,
+  buttonStyleDone: {
+    elevation: 2,
+    height: 30,
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    backgroundColor: "white",
   },
 });

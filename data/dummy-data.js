@@ -9,6 +9,7 @@ export const WORKOUTS = [
     "Olahraga Satu",
     ["Push Up", "Pull Up"],
     ["2 Menit", "1 Menit"],
+    "3 Menit",
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
@@ -20,6 +21,7 @@ export const WORKOUTS = [
     "Olahraga Dua",
     ["Push Up", "Pull Up"],
     ["2 Menit", "1 Menit"],
+    "3 Menit",
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
@@ -31,6 +33,7 @@ export const WORKOUTS = [
     "Olahraga Tiga",
     ["Push Up", "Pull Up"],
     ["2 Menit", "1 Menit"],
+    "3 Menit",
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
@@ -42,6 +45,7 @@ export const WORKOUTS = [
     "Olahraga Empat",
     ["Push Up", "Pull Up"],
     ["2 Menit", "1 Menit"],
+    "3 Menit",
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
@@ -53,13 +57,19 @@ export const PROGRAMS = [
   new WorkoutProgram(
     "p1",
     "Program 1",
-    "Ini desk",
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
     true,
     "https://reactnative.dev/img/tiny_logo.png",
     ["Lose Weight", "Fat Burn"],
     [
-      WORKOUTS.find((workout) => workout.id === "w1"),
-      WORKOUTS.find((workout) => workout.id === "w2"),
+      [
+        WORKOUTS.find((workout) => workout.id === "w1"),
+        WORKOUTS.find((workout) => workout.id === "w3"),
+      ],
+      [
+        WORKOUTS.find((workout) => workout.id === "w2"),
+        WORKOUTS.find((workout) => workout.id === "w4"),
+      ],
     ]
   ),
   new WorkoutProgram(
@@ -70,8 +80,14 @@ export const PROGRAMS = [
     "https://reactnative.dev/img/tiny_logo.png",
     ["Lose Weight", "Fat Burn"],
     [
-      WORKOUTS.find((workout) => workout.id === "w2"),
-      WORKOUTS.find((workout) => workout.id === "w3"),
+      [
+        WORKOUTS.find((workout) => workout.id === "w1"),
+        WORKOUTS.find((workout) => workout.id === "w3"),
+      ],
+      [
+        WORKOUTS.find((workout) => workout.id === "w2"),
+        WORKOUTS.find((workout) => workout.id === "w4"),
+      ],
     ]
   ),
   new WorkoutProgram(
@@ -82,8 +98,14 @@ export const PROGRAMS = [
     "https://reactnative.dev/img/tiny_logo.png",
     ["Lose Weight", "Fat Burn"],
     [
-      WORKOUTS.find((workout) => workout.id === "w3"),
-      WORKOUTS.find((workout) => workout.id === "w4"),
+      [
+        WORKOUTS.find((workout) => workout.id === "w1"),
+        WORKOUTS.find((workout) => workout.id === "w3"),
+      ],
+      [
+        WORKOUTS.find((workout) => workout.id === "w2"),
+        WORKOUTS.find((workout) => workout.id === "w4"),
+      ],
     ]
   ),
   new WorkoutProgram(
@@ -94,8 +116,14 @@ export const PROGRAMS = [
     "https://reactnative.dev/img/tiny_logo.png",
     ["Lose Weight", "Fat Burn"],
     [
-      WORKOUTS.find((workout) => workout.id === "w1"),
-      WORKOUTS.find((workout) => workout.id === "w4"),
+      [
+        WORKOUTS.find((workout) => workout.id === "w1"),
+        WORKOUTS.find((workout) => workout.id === "w3"),
+      ],
+      [
+        WORKOUTS.find((workout) => workout.id === "w2"),
+        WORKOUTS.find((workout) => workout.id === "w4"),
+      ],
     ]
   ),
 ];
