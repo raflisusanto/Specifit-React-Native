@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 function ProgramCardProgress({ id, image, title, categories, percentage }) {
   const navigation = useNavigation();
   function onPressHandler() {
-    navigation.navigate("ProgramDetail", {
+    navigation.navigate("OnGoingWorkout", {
       programId: id,
     });
   }
