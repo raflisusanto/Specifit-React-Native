@@ -1,16 +1,28 @@
 import Card from "./Card";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-function WorkoutScheduleCard({ title, est }) {
+function WorkoutScheduleCard({ id, title, est }) {
+  const navigation = useNavigation();
+
+  function onPressHandler() {
+    navigation.navigate('WorkoutStack', {
+      screen: 'WorkoutDetail',
+      params: { workoutId: id },
+    });
+  }
+
   return (
-    <Card style={styles.cardStyle}>
-      <Text style={styles.olahragaTitle}>{title}</Text>
-      <View style={styles.olahragaDescContainer}>
-        <Ionicons name="time-outline" style={{ marginRight: 4 }} />
-        <Text style={styles.olahragaDesc}>{est}</Text>
-      </View>
-    </Card>
+    <Pressable onPress={onPressHandler}>
+      <Card style={styles.cardStyle}>
+        <Text style={styles.olahragaTitle}>{title}</Text>
+        <View style={styles.olahragaDescContainer}>
+          <Ionicons name="time-outline" style={{ marginRight: 4 }} />
+          <Text style={styles.olahragaDesc}>{est}</Text>
+        </View>
+      </Card>
+    </Pressable>
   );
 }
 

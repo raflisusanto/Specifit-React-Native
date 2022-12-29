@@ -6,8 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 function ProgramCard({ id, image, categories, title, time }) {
   const navigation = useNavigation();
   function onPressHandler() {
-    navigation.navigate("ProgramDetail", {
-      programId: id,
+    navigation.navigate('WorkoutStack', {
+      screen: 'ProgramDetail',
+      params: { programId: id },
     });
   }
   return (

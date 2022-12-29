@@ -20,9 +20,9 @@ import OnBoarding from "./components/OnBoarding";
 import LoginScreen from "./screens/AuthScreens/LoginScreen";
 import RegisterScreen from "./screens/AuthScreens/RegisterScreen";
 import MainScreen from "./screens/MainScreens/MainScreen";
-import ForgetPassScreen from "./screens/AuthScreens/ForgetPassScreen";
 import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 import COLORS from "./constants/colors";
+import ProgramContextProvider from "./store/context/program-context";
 
 function Root() {
   const [showApp, setShowApp] = useState(false);
@@ -42,7 +42,7 @@ function Root() {
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color={COLORS.primary} />
+    return <ActivityIndicator size="large" color={COLORS.primary} />;
   }
 
   function onDoneHandler() {
@@ -68,7 +68,6 @@ function Root() {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="ForgetPass" component={ForgetPassScreen} />
           </>
         )}
       </Stack.Navigator>
@@ -81,7 +80,9 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
-        <Root />
+        <ProgramContextProvider>
+          <Root />
+        </ProgramContextProvider>
       </AuthContextProvider>
     </>
   );

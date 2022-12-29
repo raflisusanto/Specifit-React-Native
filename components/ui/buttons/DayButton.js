@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Pressable, View, Text, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../../constants/colors";
 
-function DayButton({ isActiveIndex, day, onPress }) {
+function DayButton({ isActiveIndex, day, onPress, isDone }) {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
@@ -12,10 +13,18 @@ function DayButton({ isActiveIndex, day, onPress }) {
       setIsActive(false);
     }
   }, [isActiveIndex, day]);
-  
+
   return (
     <Pressable onPress={onPress.bind(this, day - 1)}>
       <View style={isActive ? styles.tabStyleActive : styles.tabStyle}>
+        {isDone && <View style={styles.circle}></View>}
+        {isDone && (
+          <Ionicons
+            name="checkmark-circle"
+            style={styles.iconStyle}
+            size={20}
+          />
+        )}
         <Text style={isActive ? styles.dayStyleActive : styles.dayStyle}>
           Day
         </Text>
@@ -36,8 +45,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.primary,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     marginRight: 10,
   },
   dayStyle: {
@@ -54,8 +63,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.primary,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     backgroundColor: COLORS.primary,
     marginRight: 10,
   },
@@ -68,5 +77,20 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_700Bold",
     fontSize: 24,
     color: "white",
+  },
+  iconStyle: {
+    position: "absolute",
+    color: COLORS.success,
+    right: 0,
+    bottom: 0,
+  },
+  circle: {
+    position: "absolute",
+    width: 12,
+    height: 12,
+    borderRadius: 10,
+    backgroundColor: "white",
+    right: 5,
+    bottom: 5,
   },
 });

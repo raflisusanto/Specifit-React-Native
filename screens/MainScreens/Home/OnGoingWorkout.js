@@ -8,11 +8,29 @@ import DayButton from "../../../components/ui/buttons/DayButton";
 import Card from "../../../components/ui/cards/Card";
 import WorkoutScheduleCard from "../../../components/ui/cards/WorkoutScheduleCard";
 
-function WorkoutDetail({ route }) {
+function OnGoingWorkout({ route }) {
   const programId = route.params.programId;
   const selectedProgram = PROGRAMS.find((program) => program.id === programId);
   const [isActiveIndex, setIsActiveIndex] = useState(0);
+  const initialStatusDay = selectedProgram.statusDayList;
+  const [statusDayList, setStatusDayList] = useState(initialStatusDay);
   const cardText = `Dapatkan Tambahan Meal Plan untuk\nProgram Olahragamu`;
+
+  function onDoneHandler() {
+    setStatusDayList((currentStatusList) => {
+      let currentList = [...currentStatusList];
+      let item = { ...currentList[isActiveIndex] };
+      if (currentStatusList[isActiveIndex] === 1) {
+        item = 0;
+        selectedProgram.statusDayList[isActiveIndex] = 0;
+      } else {
+        item = 1;
+        selectedProgram.statusDayList[isActiveIndex] = 1;
+      }
+      currentList[isActiveIndex] = item;
+      return currentList;
+    });
+  }
 
   function onPressHandler(activeIdx) {
     setIsActiveIndex(activeIdx);
@@ -51,6 +69,7 @@ function WorkoutDetail({ route }) {
                     key={index}
                     isActiveIndex={isActiveIndex}
                     onPress={onPressHandler}
+                    isDone={statusDayList[index] === 1}
                   />
                 );
               })}
@@ -60,13 +79,23 @@ function WorkoutDetail({ route }) {
               {selectedProgram.workoutList[isActiveIndex].map((workout) => {
                 return (
                   <WorkoutScheduleCard
+                    id={workout.id}
                     title={workout.title}
                     est={workout.totalEst}
                     key={workout.id}
                   />
                 );
               })}
-              <Button style={styles.buttonStyle} text="Selesai Hari Ini" />
+              <Button
+                style={
+                  statusDayList[isActiveIndex] === 0
+                    ? styles.buttonStyle
+                    : styles.buttonStyleDone
+                }
+                text={statusDayList[isActiveIndex] === 0 ? "Selesai Hari Ini" : "Undo Selesai"}
+                textStyle={statusDayList[isActiveIndex] === 1 && styles.textStyleDone}
+                onPress={onDoneHandler}
+              />
             </View>
           </View>
         </View>
@@ -111,7 +140,7 @@ function WorkoutDetail({ route }) {
   );
 }
 
-export default WorkoutDetail;
+export default OnGoingWorkout;
 
 const styles = StyleSheet.create({
   titleStyle: {
@@ -154,7 +183,6 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   buttonStyle: {
-    elevation: 2,
     height: 30,
     borderRadius: 4,
     justifyContent: "center",
@@ -164,14 +192,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   buttonStyleDone: {
-    elevation: 2,
     height: 30,
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
     borderWidth: 1,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.success,
     backgroundColor: "white",
+  },
+  textStyleDone: {
+    color: COLORS.success,
   },
 });

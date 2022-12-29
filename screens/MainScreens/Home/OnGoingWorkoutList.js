@@ -1,21 +1,32 @@
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useContext } from "react";
-import ProgramCard from "../../../components/ui/cards/ProgramCard";
+import ProgramCardProgress from "../../../components/ui/cards/ProgramCardProgress";
 import { ProgramContext } from "../../../store/context/program-context";
 import { PROGRAMS } from "../../../data/dummy-data";
 
-function BookmarkScreen() {
+function sum(arr) {
+  let sum = 0;
+  arr.forEach((num) => {
+    sum += num;
+  });
+  return sum;
+}
+
+function OnGoingWorkoutList() {
   const programCtx = useContext(ProgramContext);
 
   function renderProgramItem({ item }) {
     return (
-      programCtx.bookmarkList.includes(item.id) && (
-        <ProgramCard
+      programCtx.programList.includes(item.id) && (
+        <ProgramCardProgress
           id={item.id}
           image={item.img}
           title={item.title}
           categories={item.ctgList}
-          time={item.workoutList.length}
+          percentage={
+            (sum(item.statusDayList) / item.ctgList.length) * 100
+          }
+          key={item.id}
         />
       )
     );
@@ -23,22 +34,18 @@ function BookmarkScreen() {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.titleStyle}>List Program yang Disimpan</Text>
-        {programCtx.bookmarkList.length > 0 ? (
-          <FlatList
-            data={PROGRAMS}
-            keyExtractor={(item) => item.id}
-            renderItem={renderProgramItem}
-          />
-        ) : (
-          <Text style={styles.feedbackStyle}>Belum ada program tersimpan</Text>
-        )}
+        <Text style={styles.titleStyle}>List Program yang Dipilih</Text>
+        <FlatList
+          data={PROGRAMS}
+          keyExtractor={(item) => item.id}
+          renderItem={renderProgramItem}
+        />
       </View>
     </View>
   );
 }
 
-export default BookmarkScreen;
+export default OnGoingWorkoutList;
 
 const styles = StyleSheet.create({
   container: {
@@ -48,10 +55,5 @@ const styles = StyleSheet.create({
   titleStyle: {
     fontSize: 20,
     fontFamily: "OpenSans_700Bold",
-  },
-  feedbackStyle: {
-    fontSize: 16,
-    fontFamily: "OpenSans_400Regular",
-    marginTop: 10,
   },
 });
