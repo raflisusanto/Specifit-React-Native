@@ -1,6 +1,13 @@
 import { PROGRAMS } from "../../../../data/dummy-data";
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
-import { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+} from "react-native";
+import { useState, useContext } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../../../../components/ui/buttons/Button";
 import ReadMore from "@fawazahmed/react-native-read-more";
@@ -8,25 +15,39 @@ import COLORS from "../../../../constants/colors";
 import DayButton from "../../../../components/ui/buttons/DayButton";
 import Card from "../../../../components/ui/cards/Card";
 import WorkoutScheduleCard from "../../../../components/ui/cards/WorkoutScheduleCard";
+import { ProgramContext } from "../../../../store/context/program-context";
 
 function ProgramDetail({ route }) {
   const programId = route.params.programId;
   const selectedProgram = PROGRAMS.find((program) => program.id === programId);
   const [isActiveIndex, setIsActiveIndex] = useState(0);
   const cardText = `Dapatkan Tambahan Meal Plan untuk\nProgram Olahragamu`;
+  const programCtx = useContext(ProgramContext);
 
   function onPressHandler(activeIdx) {
     setIsActiveIndex(activeIdx);
   }
 
   function addButtonHandler() {
-    const programStatus = selectedProgram.status;
+    const programStatus = programCtx.programList.includes(selectedProgram.id);
     if (programStatus) {
+      programCtx.removeProgram(selectedProgram.id);
       selectedProgram.setStatus(false);
     } else {
+      programCtx.addProgram(selectedProgram.id);
       selectedProgram.setStatus(true);
     }
-    // Tetep harus tambah context utk rerender componentnya
+  }
+
+  function bookmarkHandler() {
+    const bookmarkStatus = programCtx.bookmarkList.includes(selectedProgram.id);
+    if (bookmarkStatus) {
+      programCtx.removeBookmark(selectedProgram.id);
+      selectedProgram.setIsBookmarked(false);
+    } else {
+      programCtx.addBookmark(selectedProgram.id);
+      selectedProgram.setIsBookmarked(true);
+    }
   }
 
   return (
@@ -120,7 +141,11 @@ function ProgramDetail({ route }) {
       <View style={styles.buttonSection}>
         <View style={styles.buttonContainer}>
           <Button
-            style={selectedProgram.status ? styles.buttonAddedStyle : styles.buttonStyle}
+            style={
+              selectedProgram.status
+                ? styles.buttonAddedStyle
+                : styles.buttonStyle
+            }
             text={
               selectedProgram.status
                 ? "Program Sukses Ditambah"
@@ -132,11 +157,17 @@ function ProgramDetail({ route }) {
             iconStyle={selectedProgram.status && styles.iconAddedStyle}
             textStyle={selectedProgram.status && styles.textAddedStyle}
           />
-          <Ionicons
-            name="bookmark-outline"
-            size={20}
-            style={{ marginLeft: "auto", marginBottom: -14 }}
-          />
+          <Pressable onPress={bookmarkHandler} style={{ marginLeft: "auto" }}>
+            <Ionicons
+              name={
+                programCtx.bookmarkList.includes(selectedProgram.id)
+                  ? "bookmark"
+                  : "bookmark-outline"
+              }
+              size={20}
+              style={{ marginBottom: -14 }}
+            />
+          </Pressable>
         </View>
       </View>
     </View>
@@ -202,7 +233,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     marginBottom: 16,
   },
   buttonSection: {
@@ -221,7 +252,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingLeft: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderColor: COLORS.success,
     borderWidth: 1,
   },

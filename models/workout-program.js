@@ -7,6 +7,7 @@ class WorkoutProgram {
         this.img = img;
         this.ctgList = ctgList;
         this.workoutList = workoutList;
+        this.isBookmarked = this.isBookmarked;
         this.statusDayList = this.initializeStatus();
     }
 
@@ -16,6 +17,10 @@ class WorkoutProgram {
             statusDayList.push(0);
         }
         return statusDayList;
+    }
+
+    setIsBookmarked(status) {
+        this.isBookmarked = status; 
     }
 
     setStatusDay(idx, val) {

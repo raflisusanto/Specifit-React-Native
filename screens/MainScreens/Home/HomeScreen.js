@@ -1,4 +1,5 @@
 import { Text, Image, View, ScrollView, StyleSheet } from "react-native";
+import { useContext } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import COLORS from "../../../constants/colors";
@@ -8,6 +9,8 @@ import CategoryButton from "../../../components/ui/buttons/CategoryButton";
 import ProgramCardProgress from "../../../components/ui/cards/ProgramCardProgress";
 import TipsCard from "../../../components/ui/cards/TipsCard";
 import { PROGRAMS, TIPS } from "../../../data/dummy-data";
+import { ProgramContext } from "../../../store/context/program-context";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 function sum(arr) {
   let sum = 0;
@@ -19,6 +22,17 @@ function sum(arr) {
 
 function HomeScreen() {
   const cardText = `Lengkapi Datamu dan\ndapatkan Rekomendasi\nProgram dari Kami`;
+  const programCtx = useContext(ProgramContext);
+  const navigation = useNavigation();
+  useIsFocused(); // Re-renders component on navigation
+
+  function seeAllProgramHandler() {
+    navigation.navigate("OnGoingWorkoutList");
+  }
+
+  function seeAllListHandler() {
+    navigation.navigate("TipsList");
+  }
 
   return (
     <>
@@ -44,12 +58,6 @@ function HomeScreen() {
           >
             Halo, Rita
           </Text>
-          <Ionicons
-            name="notifications"
-            color="white"
-            size={24}
-            style={{ marginLeft: "auto" }}
-          ></Ionicons>
         </View>
         <View
           style={{
@@ -139,30 +147,43 @@ function HomeScreen() {
               <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 16 }}>
                 Program Olahraga Saya
               </Text>
-              <ButtonNoOutline
-                text="Lihat Semua"
-                containerStyle={{ marginLeft: "auto" }}
-                textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
-              />
+              {programCtx.programList.length > 0 && (
+                <ButtonNoOutline
+                  text="Lihat Semua"
+                  containerStyle={{ marginLeft: "auto" }}
+                  textStyle={{
+                    fontFamily: "OpenSans_600SemiBold",
+                    fontSize: 12,
+                  }}
+                  onPress={seeAllProgramHandler}
+                />
+              )}
             </View>
             <View>
-              {PROGRAMS.slice(0, 4).map((program) => {
-                return (
-                  program.status && (
-                    <ProgramCardProgress
-                      id={program.id}
-                      image={program.img}
-                      title={program.title}
-                      categories={program.ctgList}
-                      percentage={
-                        (sum(program.statusDayList) / program.ctgList.length) *
-                        10
-                      }
-                      key={program.id}
-                    />
-                  )
-                );
-              })}
+              {programCtx.programList.length > 0 ? (
+                PROGRAMS.slice(0, 4).map((program) => {
+                  return (
+                    programCtx.programList.includes(program.id) && (
+                      <ProgramCardProgress
+                        id={program.id}
+                        image={program.img}
+                        title={program.title}
+                        categories={program.ctgList}
+                        percentage={
+                          (sum(program.statusDayList) /
+                            program.ctgList.length) *
+                          100
+                        }
+                        key={program.id}
+                      />
+                    )
+                  );
+                })
+              ) : (
+                <Text style={styles.feedbackStyle}>
+                  Belum ada program yang dipilih
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -176,6 +197,7 @@ function HomeScreen() {
                 text="Lihat Semua"
                 containerStyle={{ marginLeft: "auto" }}
                 textStyle={{ fontFamily: "OpenSans_600SemiBold", fontSize: 12 }}
+                onPress={seeAllListHandler}
               />
             </View>
             <ScrollView
@@ -185,7 +207,12 @@ function HomeScreen() {
             >
               {TIPS.slice(0, 5).map((tip) => {
                 return (
-                  <TipsCard id={tip.id} image={tip.img} title={tip.title} key={tip.id} />
+                  <TipsCard
+                    id={tip.id}
+                    image={tip.img}
+                    title={tip.title}
+                    key={tip.id}
+                  />
                 );
               })}
             </ScrollView>
@@ -227,5 +254,10 @@ const styles = StyleSheet.create({
   sectionMargins: {
     marginHorizontal: 20,
     marginVertical: 20,
+  },
+  feedbackStyle: {
+    fontSize: 14,
+    fontFamily: "OpenSans_400Regular",
+    marginTop: 10,
   },
 });

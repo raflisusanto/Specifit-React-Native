@@ -177,11 +177,6 @@ function LoginScreen({ navigation }) {
               <Ionicons name={"eye"} style={{ color: "#C8C8C8" }} size={16} />
             </Pressable>
           </View>
-          <ButtonNoOutline
-            style={{ marginLeft: "auto" }}
-            text="Lupa Password?"
-            onPress={() => navigation.navigate("ForgetPass")}
-          ></ButtonNoOutline>
           <Button
             style={{ marginVertical: 40 }}
             text="Masuk"
