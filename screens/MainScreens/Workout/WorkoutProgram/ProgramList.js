@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Button from "../../../../components/ui/buttons/Button";
 import ProgramCard from "../../../../components/ui/cards/ProgramCard";
@@ -21,27 +20,7 @@ function ProgramList() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ marginHorizontal: 20 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "white",
-            borderRadius: 4,
-            padding: 10,
-            marginTop: 80,
-          }}
-        >
-          <Ionicons
-            name="search"
-            color={COLORS.neutral_500}
-            size={16}
-            style={{ marginRight: 10 }}
-          ></Ionicons>
-          <Text style={{ fontFamily: "OpenSans_400Regular", fontSize: 14 }}>
-            Cari program diet aku bangetz
-          </Text>
-        </View>
+      <View style={{ marginHorizontal: 20, marginTop: 70 }}>
         <Button
           text="Filter"
           style={{

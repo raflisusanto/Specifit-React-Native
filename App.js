@@ -23,6 +23,7 @@ import MainScreen from "./screens/MainScreens/MainScreen";
 import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 import COLORS from "./constants/colors";
 import ProgramContextProvider from "./store/context/program-context";
+import UserdataContextProvider from "./store/context/userdata-context";
 
 function Root() {
   const [showApp, setShowApp] = useState(false);
@@ -81,7 +82,9 @@ export default function App() {
       <StatusBar style="light" />
       <AuthContextProvider>
         <ProgramContextProvider>
-          <Root />
+          <UserdataContextProvider>
+            <Root />
+          </UserdataContextProvider>
         </ProgramContextProvider>
       </AuthContextProvider>
     </>
