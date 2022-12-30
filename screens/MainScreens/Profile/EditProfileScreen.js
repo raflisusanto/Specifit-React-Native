@@ -6,9 +6,8 @@ import InputField from "../../../components/ui/InputField";
 import COLORS from "../../../constants/colors";
 
 function EditProfileScreen() {
-  // Have to set input field to user data on load
-
-  const [inputs, setInputs] = useState({
+  // Have to set input field to user data (in db) on load
+  const initialUserdata = {
     name: {
       value: "",
       isValid: true,
@@ -21,7 +20,9 @@ function EditProfileScreen() {
       value: "",
       isValid: true,
     },
-  });
+  };
+
+  const [inputs, setInputs] = useState(initialUserdata);
 
   const [inputIsFocused, setInputIsFocused] = useState({
     name: {
@@ -179,7 +180,11 @@ function EditProfileScreen() {
             alignItems: "center",
           }}
         >
-          <Button style={styles.buttonStyle} text="Simpan" onPress={submitHandler} />
+          <Button
+            style={styles.buttonStyle}
+            text="Simpan"
+            onPress={submitHandler}
+          />
         </View>
       </View>
     </View>

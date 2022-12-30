@@ -1,6 +1,13 @@
-import { Text, Image, View, ScrollView, StyleSheet } from "react-native";
+import {
+  Text,
+  Image,
+  View,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import { useContext } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import COLORS from "../../../constants/colors";
 import Card from "../../../components/ui/cards/Card";
@@ -11,6 +18,8 @@ import TipsCard from "../../../components/ui/cards/TipsCard";
 import { PROGRAMS, TIPS } from "../../../data/dummy-data";
 import { ProgramContext } from "../../../store/context/program-context";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { UserdataContext } from "../../../store/context/userdata-context";
+import StatusCard from "../../../components/ui/cards/StatusCard";
 
 function sum(arr) {
   let sum = 0;
@@ -22,7 +31,9 @@ function sum(arr) {
 
 function HomeScreen() {
   const cardText = `Lengkapi Datamu dan\ndapatkan Rekomendasi\nProgram dari Kami`;
+  const cardTextRecommend = `Lihat Program Rekomendasi\nKami`;
   const programCtx = useContext(ProgramContext);
+  const userdataCtx = useContext(UserdataContext);
   const navigation = useNavigation();
   useIsFocused(); // Re-renders component on navigation
 
@@ -32,6 +43,10 @@ function HomeScreen() {
 
   function seeAllListHandler() {
     navigation.navigate("TipsList");
+  }
+
+  function seeFormHandler() {
+    navigation.navigate("FormScreen");
   }
 
   return (
@@ -54,58 +69,129 @@ function HomeScreen() {
               fontFamily: "OpenSans_700Bold",
               fontSize: 24,
               color: "white",
+              zIndex: 3,
             }}
           >
             Halo, Rita
           </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "white",
-            borderRadius: 4,
-            marginHorizontal: 20,
-            padding: 10,
-            marginVertical: 14,
-          }}
-        >
-          <Ionicons
-            name="search"
-            color={COLORS.neutral_500}
-            size={16}
-            style={{ marginRight: 10 }}
-          ></Ionicons>
-          <Text style={{ fontFamily: "OpenSans_400Regular", fontSize: 14 }}>
-            Cari program diet aku bangetz
-          </Text>
-        </View>
       </View>
-      <ScrollView style={{ marginTop: 10 }}>
-        <Card
-          style={{ marginHorizontal: 20, marginTop: 10, overflow: "hidden" }}
-        >
-          <Image
-            source={require("../../../assets/images/element_card_form_1.png")}
-            style={styles.cardImagesRight}
-          ></Image>
-          <Image
-            source={require("../../../assets/images/element_card_form_2.png")}
-            style={styles.cardImagesLeft}
-          ></Image>
-          <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 14 }}>
-            {cardText}
-          </Text>
-          <Button
-            text="Klik disini"
-            style={{
-              width: "40%",
-              height: 30,
-              borderRadius: 20,
-              marginVertical: 20,
-            }}
-          />
-        </Card>
+      <ScrollView style={{ marginTop: 25 }}>
+        {!userdataCtx.userdata.isFilled ? (
+          <Card
+            style={{ marginHorizontal: 20, marginTop: 10, overflow: "hidden" }}
+          >
+            <Image
+              source={require("../../../assets/images/element_card_form_1.png")}
+              style={styles.cardImagesRight}
+            ></Image>
+            <Image
+              source={require("../../../assets/images/element_card_form_2.png")}
+              style={styles.cardImagesLeft}
+            ></Image>
+            <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 14 }}>
+              {cardText}
+            </Text>
+            <Button
+              text="Klik disini"
+              style={{
+                width: "40%",
+                height: 30,
+                borderRadius: 20,
+                marginVertical: 20,
+              }}
+              onPress={seeFormHandler}
+            />
+          </Card>
+        ) : (
+          <>
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionMargins}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{ fontFamily: "OpenSans_700Bold", fontSize: 16 }}
+                  >
+                    Status Kamu Sekarang
+                  </Text>
+                  <Pressable onPress={seeFormHandler}>
+                    <Feather
+                      name="edit"
+                      size={20}
+                      style={{ color: COLORS.primary }}
+                    />
+                  </Pressable>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <StatusCard
+                    title={"Indeks Massa\nTubuh"}
+                    desc={"(IMT)"}
+                    score={"27.2"}
+                    descScore="Gemuk"
+                    iconName="heartbeat"
+                  />
+                  <StatusCard
+                    title={"Asupan Kalori\nper Hari"}
+                    desc={"Untuk memperta-\nhankan berat badan"}
+                    score={"2200"}
+                    descScore="kkal"
+                    showTextIcon={true}
+                    textIcon="kkal"
+                  />
+                  <StatusCard
+                    title={"Asupan Kalori\nper Hari"}
+                    desc={"Untuk menurunkan berat\nbadan (1 kg/minggu)"}
+                    score={"1700"}
+                    descScore="kkal"
+                    showTextIcon={true}
+                    textIcon="kkal"
+                  />
+                </View>
+              </View>
+            </View>
+            <Card
+              style={{
+                marginHorizontal: 20,
+                marginTop: 10,
+                overflow: "hidden",
+                backgroundColor: COLORS.primary,
+                borderRadius: 10,
+                paddingVertical: 16,
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/element_card_recommendation.png")}
+                style={styles.recommendCardImage}
+              ></Image>
+              <View style={{ marginLeft: "auto" }}>
+                <Text
+                  style={{
+                    fontFamily: "OpenSans_600SemiBold",
+                    fontSize: 12,
+                    color: "white",
+                  }}
+                >
+                  {cardTextRecommend}
+                </Text>
+                <Button
+                  text="Klik disini"
+                  style={{
+                    width: "80%",
+                    height: 22,
+                    borderRadius: 20,
+                    marginTop: 10,
+                    backgroundColor: "white",
+                  }}
+                  textStyle={{ color: "black", fontSize: 12 }}
+                />
+              </View>
+            </Card>
+          </>
+        )}
         <View style={styles.sectionContainer}>
           <View style={styles.sectionMargins}>
             <View style={{ flexDirection: "row" }}>
@@ -229,9 +315,10 @@ const styles = StyleSheet.create({
   staticImage: {
     resizeMode: "contain",
     alignSelf: "center",
-    marginTop: -5,
+    marginTop: -55,
     position: "absolute",
     overflow: "hidden",
+    zIndex: 2,
   },
   cardImagesRight: {
     resizeMode: "contain",
@@ -259,5 +346,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "OpenSans_400Regular",
     marginTop: 10,
+  },
+  recommendCardImage: {
+    resizeMode: "contain",
+    alignSelf: "flex-start",
+    bottom: 0,
+    left: 20,
+    position: "absolute",
   },
 });
