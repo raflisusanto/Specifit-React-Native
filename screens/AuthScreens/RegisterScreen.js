@@ -206,11 +206,16 @@ function RegisterScreen({ navigation }) {
               focusState={inputIsFocused.password.isFocused}
               secureTextEntry={showPassword}
             ></InputField>
-            <Ionicons
-              name={"eye"}
-              style={{ marginLeft: "auto", color: "#C8C8C8" }}
-              size={16}
-            />
+            <Pressable
+              onPress={() =>
+                setShowPassword((currShowPass) => {
+                  return !currShowPass;
+                })
+              }
+              style={{ marginLeft: "auto" }}
+            >
+              <Ionicons name={"eye"} style={{ color: "#C8C8C8" }} size={16} />
+            </Pressable>
           </View>
           <Button
             style={{ marginVertical: 40 }}
