@@ -25,7 +25,7 @@ export const WORKOUTS = [
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
-    ["Arms", "Chest"]
+    ["Shoulder", "Fat Burning"]
   ),
   new Workout(
     "w3",
@@ -37,7 +37,7 @@ export const WORKOUTS = [
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
-    ["Arms", "Chest"]
+    ["Legs"]
   ),
   new Workout(
     "w4",
@@ -49,7 +49,7 @@ export const WORKOUTS = [
     "Test Deskripsi",
     "https://www.youtube.com/watch?v=hzQj0O09q7U&ab_channel=PrinceY",
     "10 Menit",
-    ["Arms", "Chest"]
+    ["> 10 Menit"]
   ),
 ];
 

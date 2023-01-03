@@ -207,22 +207,27 @@ function HomeScreen() {
               <CategoryButton
                 image={require("../../../assets/images/ctg_1.png")}
                 category="Legs"
+                ctg_id="legs"
               />
               <CategoryButton
                 image={require("../../../assets/images/ctg_2.png")}
                 category="Arms"
+                ctg_id="arms"
               />
               <CategoryButton
                 image={require("../../../assets/images/ctg_3.png")}
                 category="Fat Burning"
+                ctg_id="fatburn"
               />
               <CategoryButton
                 image={require("../../../assets/images/ctg_4.png")}
-                category="Running"
+                category="Chest"
+                ctg_id="chest"
               />
               <CategoryButton
                 image={require("../../../assets/images/ctg_5.png")}
-                category="Yoga"
+                category="Abs"
+                ctg_id="abs"
               />
             </ScrollView>
           </View>
