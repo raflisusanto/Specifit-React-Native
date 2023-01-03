@@ -4,6 +4,7 @@ import WorkoutList from "./Workout/Workout/WorkoutList";
 import ProgramDetail from "./Workout/WorkoutProgram/ProgramDetail";
 import ProgramList from "./Workout/WorkoutProgram/ProgramList";
 import WorkoutScreen from "./Workout/WorkoutScreen";
+import WorkoutFilter from "./Workout/Workout/WorkoutFilter";
 import { useLayoutEffect } from "react";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
@@ -15,6 +16,7 @@ function WorkoutNavigation({ navigation, route }) {
       "WorkoutDetail",
       "ProgramList",
       "ProgramDetail",
+      "WorkoutFilter",
     ];
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarStyle: { display: "none" } });
@@ -32,7 +34,12 @@ function WorkoutNavigation({ navigation, route }) {
         options={{ headerBackVisible: false }}
       />
       <WorkoutStack.Screen name="WorkoutList" component={WorkoutList} />
-      <WorkoutStack.Screen name="WorkoutDetail" component={WorkoutDetail} options={{headerTintColor: 'white'}} />
+      <WorkoutStack.Screen
+        name="WorkoutDetail"
+        component={WorkoutDetail}
+        options={{ headerTintColor: "white" }}
+      />
+      <WorkoutStack.Screen name="WorkoutFilter" component={WorkoutFilter} />
       <WorkoutStack.Screen name="ProgramList" component={ProgramList} />
       <WorkoutStack.Screen name="ProgramDetail" component={ProgramDetail} />
     </WorkoutStack.Navigator>
