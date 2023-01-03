@@ -92,6 +92,7 @@ function ProgramDetail({ route }) {
               {selectedProgram.workoutList[isActiveIndex].map((workout) => {
                 return (
                   <WorkoutScheduleCard
+                    id={workout.id}
                     title={workout.title}
                     est={workout.totalEst}
                     key={workout.id}

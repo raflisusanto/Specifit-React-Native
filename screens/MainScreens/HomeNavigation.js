@@ -6,6 +6,9 @@ import OnGoingWorkoutList from "./Home/OnGoingWorkoutList";
 import { useLayoutEffect } from "react";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import WorkoutList from "./Workout/Workout/WorkoutList";
+import ProgramList from "./Workout/WorkoutProgram/ProgramList";
+import WorkoutFilter from "./Workout/Workout/WorkoutFilter";
+import ProgramFilter from "./Workout/WorkoutProgram/ProgramFilter";
 import TipsList from "./Home/TipsList";
 import FormScreen from "./Home/Form/FormScreen";
 import FormGender from "./Home/Form/FormGender";
@@ -30,7 +33,11 @@ function HomeNavigation({ navigation, route }) {
       "FormHeight",
       "FormWeight",
       "FormActivity",
-      "FormWMedical",
+      "FormMedical",
+      "ProgramFilter",
+      "WorkoutFilter",
+      "ProgramList",
+      "WorkoutList",
     ];
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarStyle: { display: "none" } });
@@ -48,6 +55,9 @@ function HomeNavigation({ navigation, route }) {
         options={{ headerBackVisible: false }}
       />
       <HomeStack.Screen name="WorkoutList" component={WorkoutList} />
+      <HomeStack.Screen name="ProgramList" component={ProgramList} />
+      <HomeStack.Screen name="WorkoutFilter" component={WorkoutFilter} />
+      <HomeStack.Screen name="ProgramFilter" component={ProgramFilter} />
       <HomeStack.Screen name="OnGoingWorkout" component={OnGoingWorkout} />
       <HomeStack.Screen name="Tips" component={TipsScreen} />
       <HomeStack.Screen

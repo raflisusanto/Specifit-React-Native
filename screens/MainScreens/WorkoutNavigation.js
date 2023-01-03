@@ -7,6 +7,7 @@ import WorkoutScreen from "./Workout/WorkoutScreen";
 import WorkoutFilter from "./Workout/Workout/WorkoutFilter";
 import { useLayoutEffect } from "react";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import ProgramFilter from "./Workout/WorkoutProgram/ProgramFilter";
 
 const WorkoutStack = createNativeStackNavigator();
 function WorkoutNavigation({ navigation, route }) {
@@ -17,6 +18,7 @@ function WorkoutNavigation({ navigation, route }) {
       "ProgramList",
       "ProgramDetail",
       "WorkoutFilter",
+      "ProgramFilter",
     ];
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarStyle: { display: "none" } });
@@ -42,6 +44,7 @@ function WorkoutNavigation({ navigation, route }) {
       <WorkoutStack.Screen name="WorkoutFilter" component={WorkoutFilter} />
       <WorkoutStack.Screen name="ProgramList" component={ProgramList} />
       <WorkoutStack.Screen name="ProgramDetail" component={ProgramDetail} />
+      <WorkoutStack.Screen name="ProgramFilter" component={ProgramFilter} />
     </WorkoutStack.Navigator>
   );
 }

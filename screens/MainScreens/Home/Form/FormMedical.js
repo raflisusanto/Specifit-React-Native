@@ -3,13 +3,15 @@ import Button from "../../../../components/ui/buttons/Button";
 import QUESTION from "../../../../constants/question";
 import COLORS from "../../../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserdataContext } from "../../../../store/context/userdata-context";
 
 function FormMedical() {
   const navigation = useNavigation();
   const userdataCtx = useContext(UserdataContext);
-  const [isActive, setIsActive] = useState(userdataCtx.userdata.medicalCondition);
+  const [isActive, setIsActive] = useState(
+    userdataCtx.userdata.medicalCondition
+  );
   const [isError, setIsError] = useState(false);
   const choiceOne = "Punya";
   const choiceTwo = "Tidak Punya";
@@ -25,6 +27,11 @@ function FormMedical() {
     }
     userdataCtx.addUserdata("medicalCondition", isActive);
     userdataCtx.addUserdata("isFilled", true);
+
+    userdataCtx.calculateIMT();
+    userdataCtx.calculateCalPerDay();
+    userdataCtx.calculateRecommendation();
+
     navigation.navigate("Home");
   }
 
