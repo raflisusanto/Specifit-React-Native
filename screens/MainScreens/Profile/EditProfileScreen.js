@@ -110,21 +110,6 @@ function EditProfileScreen() {
     <View style={{ flex: 1 }}>
       <View style={styles.containerStyle}>
         <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginVertical: 10,
-          }}
-        >
-          <Image
-            source={{
-              uri: "https://reactnative.dev/img/tiny_logo.png",
-            }}
-            style={styles.imgStyle}
-          ></Image>
-          <ButtonNoOutline text="Edit Gambar" />
-        </View>
-        <View
           style={[
             styles.inputContainer,
             inputIsFocused.name.isFocused && styles.focusedContainer,

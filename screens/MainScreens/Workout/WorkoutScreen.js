@@ -53,7 +53,7 @@ function WorkoutScreen({ navigation }) {
         </View>
         <View style={{ marginTop: 10, backgroundColor: "white" }}>
           <View style={{ marginHorizontal: 20, marginVertical: 20 }}>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", marginBottom: 10 }}>
               <Text style={{ fontSize: 16, fontFamily: "OpenSans_700Bold" }}>
                 Program Olahraga 7 Hari
               </Text>

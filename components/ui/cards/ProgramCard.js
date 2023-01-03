@@ -39,7 +39,7 @@ export default ProgramCard;
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginTop: 14,
+    marginBottom: 14,
   },
   cardStyle: {
     elevation: 2,

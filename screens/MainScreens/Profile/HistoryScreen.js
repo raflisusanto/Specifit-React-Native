@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     fontSize: 20,
     fontFamily: "OpenSans_700Bold",
+    marginBottom: 10,
   },
   feedbackStyle: {
     fontSize: 16,

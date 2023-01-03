@@ -3,24 +3,57 @@ import Button from "../../../../components/ui/buttons/Button";
 import ProgramCard from "../../../../components/ui/cards/ProgramCard";
 import { PROGRAMS } from "../../../../data/dummy-data";
 import COLORS from "../../../../constants/colors";
+import { useNavigation } from "@react-navigation/native";
+import PROGRAMFILTER from "../../../../constants/program-filters";
 
-function ProgramList() {
+function ProgramList({ route }) {
+  let filtersObj;
+  let filters;
+  const navigation = useNavigation();
+  if (route.params) {
+    filtersObj = route.params;
+    filters = PROGRAMFILTER.filter((filter) => {
+      if (filtersObj[filter.id]) {
+        return filter.title;
+      }
+    }).map((filterObj) => filterObj.title);
+  } else {
+    filters = [];
+  }
+
   function renderWorkoutItem({ item }) {
-    return (
-      <ProgramCard
-        id={item.id}
-        image={item.img}
-        title={item.title}
-        time={item.workoutList.length}
-        categories={item.ctgList}
-        key={item.id}
-      />
-    );
+    if (filters.length === 0) {
+      return (
+        <ProgramCard
+          id={item.id}
+          image={item.img}
+          title={item.title}
+          time={item.workoutList.length}
+          categories={item.ctgList}
+          key={item.id}
+        />
+      );
+    } else {
+      for (let i = 0; i < item.ctgList.length; i++) {
+        if (filters.includes(item.ctgList[i])) {
+          return (
+            <ProgramCard
+              id={item.id}
+              image={item.img}
+              title={item.title}
+              time={item.workoutList.length}
+              categories={item.ctgList}
+              key={item.id}
+            />
+          );
+        }
+      }
+    }
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ marginHorizontal: 20, marginTop: 70 }}>
+      <View style={{ marginHorizontal: 20, marginTop: 70, flex: 1 }}>
         <Button
           text="Filter"
           style={{
@@ -37,6 +70,11 @@ function ProgramList() {
           iconName="filter-list"
           iconStyle={{ color: "black" }}
           textStyle={{ color: "black", fontSize: 12 }}
+          onPress={
+            route.params
+              ? () => navigation.navigate("ProgramFilter", route.params)
+              : () => navigation.navigate("ProgramFilter")
+          }
         />
         <Text
           style={{
@@ -47,11 +85,13 @@ function ProgramList() {
         >
           Program Olahraga {">"} 7 hari
         </Text>
-        <FlatList
-          data={PROGRAMS}
-          keyExtractor={(program) => program.id}
-          renderItem={renderWorkoutItem}
-        />
+        <View style={{ flex: 1, marginTop: 10 }}>
+          <FlatList
+            data={PROGRAMS}
+            keyExtractor={(program) => program.id}
+            renderItem={renderWorkoutItem}
+          />
+        </View>
       </View>
     </View>
   );

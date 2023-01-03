@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import COLORS from "../../../constants/colors";
@@ -35,7 +35,13 @@ function HomeScreen() {
   const programCtx = useContext(ProgramContext);
   const userdataCtx = useContext(UserdataContext);
   const navigation = useNavigation();
-  useIsFocused(); // Re-renders component on navigation
+  const isFocused = useIsFocused(); // Re-renders component on navigation
+
+  useEffect(() => {
+    userdataCtx.calculateIMT();
+    userdataCtx.calculateCalPerDay();
+    userdataCtx.calculateRecommendation();
+  }, [isFocused]);
 
   function seeAllProgramHandler() {
     navigation.navigate("OnGoingWorkoutList");
@@ -130,14 +136,14 @@ function HomeScreen() {
                   <StatusCard
                     title={"Indeks Massa\nTubuh"}
                     desc={"(IMT)"}
-                    score={"27.2"}
-                    descScore="Gemuk"
+                    score={userdataCtx.userdata.imt}
+                    descScore={userdataCtx.userdata.imtStatus}
                     iconName="heartbeat"
                   />
                   <StatusCard
                     title={"Asupan Kalori\nper Hari"}
                     desc={"Untuk memperta-\nhankan berat badan"}
-                    score={"2200"}
+                    score={userdataCtx.userdata.calPerDayHold}
                     descScore="kkal"
                     showTextIcon={true}
                     textIcon="kkal"
@@ -145,7 +151,7 @@ function HomeScreen() {
                   <StatusCard
                     title={"Asupan Kalori\nper Hari"}
                     desc={"Untuk menurunkan berat\nbadan (1 kg/minggu)"}
-                    score={"1700"}
+                    score={userdataCtx.userdata.calPerDayLose}
                     descScore="kkal"
                     showTextIcon={true}
                     textIcon="kkal"
@@ -187,6 +193,11 @@ function HomeScreen() {
                     backgroundColor: "white",
                   }}
                   textStyle={{ color: "black", fontSize: 12 }}
+                  onPress={() =>
+                    navigation.navigate("ProgramList", {
+                      ...userdataCtx.userdata.recommendation,
+                    })
+                  }
                 />
               </View>
             </Card>
