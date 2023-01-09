@@ -21,7 +21,7 @@ function ProgramCardProgress({ id, image, title, categories, percentage }) {
         ></Image>
         <View style={styles.workoutDetailsContainer}>
           <Text style={styles.titleText}>{title}</Text>
-          <Text style={styles.categoryText}>{categories.join(", ")}</Text>
+          <Text style={styles.categoryText}>{categories?.join(", ")}</Text>
           <View style={styles.progressContainer}>
             <View
               style={[styles.progressBar, { width: `${percentage + "%"}` }]}

@@ -2,12 +2,14 @@ import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useContext } from "react";
 import ProgramCard from "../../../components/ui/cards/ProgramCard";
 import { ProgramContext } from "../../../store/context/program-context";
-import { PROGRAMS } from "../../../data/dummy-data";
+import { DataContext } from "../../../store/context/data-context";
 
 function BookmarkScreen() {
   const programCtx = useContext(ProgramContext);
+  const dataCtx = useContext(DataContext);
 
   function renderProgramItem({ item }) {
+    console.log(programCtx.bookmarkList.includes(item.id));
     return (
       programCtx.bookmarkList.includes(item.id) && (
         <ProgramCard
@@ -26,7 +28,7 @@ function BookmarkScreen() {
         <Text style={styles.titleStyle}>List Program yang Disimpan</Text>
         {programCtx.bookmarkList.length > 0 ? (
           <FlatList
-            data={PROGRAMS}
+            data={dataCtx.PROGRAMS}
             keyExtractor={(item) => item.id}
             renderItem={renderProgramItem}
           />

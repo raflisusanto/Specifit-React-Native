@@ -1,8 +1,8 @@
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useContext } from "react";
 import ProgramCardProgress from "../../../components/ui/cards/ProgramCardProgress";
-import { ProgramContext } from "../../../store/context/program-context";
 import { PROGRAMS } from "../../../data/dummy-data";
+import { DataContext } from "../../../store/context/data-context";
 
 function sum(arr) {
   let sum = 0;
@@ -13,11 +13,11 @@ function sum(arr) {
 }
 
 function OnGoingWorkoutList() {
-  const programCtx = useContext(ProgramContext);
+  const dataCtx = useContext(DataContext);
 
   function renderProgramItem({ item }) {
     return (
-      programCtx.programList.includes(item.id) && (
+      dataCtx.STATUS?.programid.includes(item.id) && (
         <ProgramCardProgress
           id={item.id}
           image={item.img}
@@ -36,7 +36,7 @@ function OnGoingWorkoutList() {
       <View style={styles.container}>
         <Text style={styles.titleStyle}>List Program yang Dipilih</Text>
         <FlatList
-          data={PROGRAMS}
+          data={dataCtx.PROGRAMS}
           keyExtractor={(item) => item.id}
           renderItem={renderProgramItem}
         />

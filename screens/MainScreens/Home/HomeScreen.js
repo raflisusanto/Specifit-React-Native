@@ -5,8 +5,9 @@ import {
   ScrollView,
   StyleSheet,
   Pressable,
+  Alert,
 } from "react-native";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import COLORS from "../../../constants/colors";
@@ -15,11 +16,14 @@ import Button from "../../../components/ui/buttons/Button";
 import CategoryButton from "../../../components/ui/buttons/CategoryButton";
 import ProgramCardProgress from "../../../components/ui/cards/ProgramCardProgress";
 import TipsCard from "../../../components/ui/cards/TipsCard";
-import { PROGRAMS, TIPS } from "../../../data/dummy-data";
 import { ProgramContext } from "../../../store/context/program-context";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { UserdataContext } from "../../../store/context/userdata-context";
 import StatusCard from "../../../components/ui/cards/StatusCard";
+import { DataContext } from "../../../store/context/data-context";
+import { AuthContext } from "../../../store/context/auth-context";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../config/firebase/firebase";
 
 function sum(arr) {
   let sum = 0;
@@ -34,13 +38,45 @@ function HomeScreen() {
   const cardTextRecommend = `Lihat Program Rekomendasi\nKami`;
   const programCtx = useContext(ProgramContext);
   const userdataCtx = useContext(UserdataContext);
+  const dataCtx = useContext(DataContext);
+  const authCtx = useContext(AuthContext);
   const navigation = useNavigation();
   const isFocused = useIsFocused(); // Re-renders component on navigation
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    userdataCtx.calculateIMT();
-    userdataCtx.calculateCalPerDay();
-    userdataCtx.calculateRecommendation();
+    if (isFocused) {
+      userdataCtx.getUserdata();
+      if (userdataCtx.userdata.isFilled) {
+        userdataCtx.calculateIMT();
+        userdataCtx.calculateCalPerDay();
+        userdataCtx.calculateRecommendation();
+      }
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    try {
+      const getName = async () => {
+        const data = await getDoc(doc(db, "users", authCtx.currentUid));
+        const usersData = data.data();
+        setUsername(usersData.name);
+      };
+      getName();
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    // Get Data
+    if (isFocused) {
+      dataCtx.getWorkoutData();
+      dataCtx.getWorkoutProgramData();
+      dataCtx.getTips();
+      dataCtx.getProgramStatus();
+      programCtx.getProgramStatus();
+    }
   }, [isFocused]);
 
   function seeAllProgramHandler() {
@@ -78,12 +114,12 @@ function HomeScreen() {
               zIndex: 3,
             }}
           >
-            Halo, Rita
+            Halo, {username}
           </Text>
         </View>
       </View>
       <ScrollView style={{ marginTop: 25 }}>
-        {!userdataCtx.userdata.isFilled ? (
+        {!userdataCtx.userdata?.isFilled ? (
           <Card
             style={{ marginHorizontal: 20, marginTop: 10, overflow: "hidden" }}
           >
@@ -249,7 +285,7 @@ function HomeScreen() {
               <Text style={{ fontFamily: "OpenSans_700Bold", fontSize: 16 }}>
                 Program Olahraga Saya
               </Text>
-              {programCtx.programList.length > 0 && (
+              {dataCtx.STATUS?.programid.length > 0 && (
                 <ButtonNoOutline
                   text="Lihat Semua"
                   containerStyle={{ marginLeft: "auto" }}
@@ -262,10 +298,10 @@ function HomeScreen() {
               )}
             </View>
             <View>
-              {programCtx.programList.length > 0 ? (
-                PROGRAMS.slice(0, 4).map((program) => {
+              {dataCtx.STATUS?.programid.length > 0 ? (
+                dataCtx.PROGRAMS.slice(0, 4).map((program) => {
                   return (
-                    programCtx.programList.includes(program.id) && (
+                    dataCtx.STATUS.programid.includes(program.id) && (
                       <ProgramCardProgress
                         id={program.id}
                         image={program.img}
@@ -273,7 +309,7 @@ function HomeScreen() {
                         categories={program.ctgList}
                         percentage={
                           (sum(program.statusDayList) /
-                            program.ctgList.length) *
+                            program.workoutList.length) *
                           100
                         }
                         key={program.id}
@@ -307,7 +343,7 @@ function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               style={{ marginRight: -20 }}
             >
-              {TIPS.slice(0, 5).map((tip) => {
+              {dataCtx.TIPS.slice(0, 5).map((tip) => {
                 return (
                   <TipsCard
                     id={tip.id}

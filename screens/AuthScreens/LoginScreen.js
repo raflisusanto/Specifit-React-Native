@@ -89,7 +89,7 @@ function LoginScreen({ navigation }) {
 
     // Log User In Here
     console.log("User Logged In");
-    userAuthCtx.loginHandler();
+    userAuthCtx.loginHandler(submitData.email, submitData.password);
 
     // Add Loading
     console.log('Loading');

@@ -3,8 +3,23 @@ import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import WorkoutCard from "../../../components/ui/cards/WorkoutCard";
 import ProgramCard from "../../../components/ui/cards/ProgramCard";
 import { PROGRAMS, WORKOUTS } from "../../../data/dummy-data";
+import { useContext, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { DataContext } from "../../../store/context/data-context";
 
 function WorkoutScreen({ navigation }) {
+  const dataCtx = useContext(DataContext);
+  const isFocused = useIsFocused(); // Re-renders component on navigation
+
+  useEffect(() => {
+    if (isFocused) {
+      // Get Data
+      dataCtx.getWorkoutData();
+      dataCtx.getWorkoutProgramData();
+      dataCtx.getTips();
+    }
+  }, [isFocused]);
+
   return (
     <>
       <Image
@@ -36,7 +51,7 @@ function WorkoutScreen({ navigation }) {
                 onPress={() => navigation.navigate("WorkoutList")}
               />
             </View>
-            {WORKOUTS.slice(0, 3).map((workout) => {
+            {dataCtx.WORKOUTS.slice(0, 3).map((workout) => {
               return (
                 <WorkoutCard
                   id={workout.id}
@@ -64,7 +79,7 @@ function WorkoutScreen({ navigation }) {
                 onPress={() => navigation.navigate("ProgramList")}
               />
             </View>
-            {PROGRAMS.slice(0, 3).map((program) => {
+            {dataCtx.PROGRAMS.slice(0, 3).map((program) => {
               return (
                 <ProgramCard
                   id={program.id}
