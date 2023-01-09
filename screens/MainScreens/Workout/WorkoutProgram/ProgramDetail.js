@@ -1,4 +1,3 @@
-import { PROGRAMS } from "../../../../data/dummy-data";
 import {
   View,
   Text,
@@ -6,8 +5,9 @@ import {
   ScrollView,
   StyleSheet,
   Pressable,
+  Alert,
 } from "react-native";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../../../../components/ui/buttons/Button";
 import ReadMore from "@fawazahmed/react-native-read-more";
@@ -15,21 +15,27 @@ import COLORS from "../../../../constants/colors";
 import DayButton from "../../../../components/ui/buttons/DayButton";
 import Card from "../../../../components/ui/cards/Card";
 import WorkoutScheduleCard from "../../../../components/ui/cards/WorkoutScheduleCard";
+import { useIsFocused } from "@react-navigation/native";
 import { ProgramContext } from "../../../../store/context/program-context";
+import { DataContext } from "../../../../store/context/data-context";
 
 function ProgramDetail({ route }) {
   const programId = route.params.programId;
-  const selectedProgram = PROGRAMS.find((program) => program.id === programId);
   const [isActiveIndex, setIsActiveIndex] = useState(0);
   const cardText = `Dapatkan Tambahan Meal Plan untuk\nProgram Olahragamu`;
   const programCtx = useContext(ProgramContext);
+  const dataCtx = useContext(DataContext);
+  const isFocused = useIsFocused(); // Re-renders component on navigation
+  const selectedProgram = dataCtx.PROGRAMS.find(
+    (program) => program.id === programId
+  );
 
   function onPressHandler(activeIdx) {
     setIsActiveIndex(activeIdx);
   }
 
   function addButtonHandler() {
-    const programStatus = programCtx.programList.includes(selectedProgram.id);
+    const programStatus = programCtx.programList?.includes(selectedProgram.id);
     if (programStatus) {
       programCtx.removeProgram(selectedProgram.id);
       selectedProgram.setStatus(false);
@@ -40,7 +46,9 @@ function ProgramDetail({ route }) {
   }
 
   function bookmarkHandler() {
-    const bookmarkStatus = programCtx.bookmarkList.includes(selectedProgram.id);
+    const bookmarkStatus = programCtx.bookmarkList?.includes(
+      selectedProgram.id
+    );
     if (bookmarkStatus) {
       programCtx.removeBookmark(selectedProgram.id);
       selectedProgram.setIsBookmarked(false);
@@ -49,6 +57,16 @@ function ProgramDetail({ route }) {
       selectedProgram.setIsBookmarked(true);
     }
   }
+
+  useEffect(() => {
+    programCtx.updateProgramStatus();
+    programCtx.setUsedProgramIds(dataCtx.STATUS?.programid);
+    programCtx.setBookmarkedProgramIds(dataCtx.STATUS?.bookmark);
+    dataCtx.getWorkoutData();
+    dataCtx.getWorkoutProgramData();
+    dataCtx.getTips();
+    dataCtx.getProgramStatus();
+  }, [isFocused]);
 
   return (
     <View style={{ flex: 1, marginTop: 80 }}>
@@ -143,25 +161,35 @@ function ProgramDetail({ route }) {
         <View style={styles.buttonContainer}>
           <Button
             style={
-              selectedProgram.status
+              programCtx.programList?.includes(selectedProgram.id)
                 ? styles.buttonAddedStyle
                 : styles.buttonStyle
             }
             text={
-              selectedProgram.status
+              programCtx.programList?.includes(selectedProgram.id)
                 ? "Program Sukses Ditambah"
                 : "Coba Program"
             }
             showIcon={true}
-            iconName={selectedProgram.status ? "check-circle" : "add"}
+            iconName={
+              programCtx.programList?.includes(selectedProgram.id)
+                ? "check-circle"
+                : "add"
+            }
             onPress={addButtonHandler}
-            iconStyle={selectedProgram.status && styles.iconAddedStyle}
-            textStyle={selectedProgram.status && styles.textAddedStyle}
+            iconStyle={
+              programCtx.programList?.includes(selectedProgram.id) &&
+              styles.iconAddedStyle
+            }
+            textStyle={
+              programCtx.programList?.includes(selectedProgram.id) &&
+              styles.textAddedStyle
+            }
           />
           <Pressable onPress={bookmarkHandler} style={{ marginLeft: "auto" }}>
             <Ionicons
               name={
-                programCtx.bookmarkList.includes(selectedProgram.id)
+                programCtx.bookmarkList?.includes(selectedProgram.id)
                   ? "bookmark"
                   : "bookmark-outline"
               }

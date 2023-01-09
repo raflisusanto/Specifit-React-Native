@@ -1,11 +1,13 @@
 import { Text, Image, StyleSheet, View, ScrollView } from "react-native";
 import { WORKOUTS } from "../../../../data/dummy-data";
 import WorkoutDetailCard from "../../../../components/ui/cards/WorkoutDetailCard";
+import { useContext } from "react";
+import { DataContext } from "../../../../store/context/data-context";
 
 function WorkoutDetail({ route }) {
   const workoutId = route.params.workoutId;
-  const selectedWorkout = WORKOUTS.find((workout) => workout.id === workoutId);
-
+  const dataCtx = useContext(DataContext);
+  const selectedWorkout = dataCtx.WORKOUTS.find((workout) => workout.id === workoutId);
   return (
     <>
       <Image

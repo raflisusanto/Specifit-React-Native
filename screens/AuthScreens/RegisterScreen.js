@@ -1,13 +1,16 @@
-import { View, StyleSheet, Image, Text, Pressable } from "react-native";
-import { useState } from "react";
+import { View, StyleSheet, Image, Text, Pressable, Alert } from "react-native";
+import { useContext, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../../components/ui/buttons/Button";
 import ButtonNoOutline from "../../components/ui/buttons/ButtonNoOutline";
 import Card from "../../components/ui/cards/Card";
 import InputField from "../../components/ui/InputField";
 import COLORS from "../../constants/colors";
+import { AuthContext } from "../../store/context/auth-context";
 
 function RegisterScreen({ navigation }) {
+  const userAuthCtx = useContext(AuthContext);
+
   const [inputs, setInputs] = useState({
     name: {
       value: "",
@@ -99,12 +102,10 @@ function RegisterScreen({ navigation }) {
     }
 
     // Daftar User Here
-    console.log("User Terdaftar");
-
-    // Add Loading
-
-    // Navigate to Login
-    navigation.navigate("Login");
+    userAuthCtx.signUpHandler(submitData.name, submitData.email, submitData.password);
+    Alert.alert("Success", "Registrasi Berhasil", [
+      { text: "OK" },
+    ]);
   }
 
   return (

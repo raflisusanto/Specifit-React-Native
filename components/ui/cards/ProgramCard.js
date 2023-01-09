@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 function ProgramCard({ id, image, categories, title, time }) {
   const navigation = useNavigation();
   function onPressHandler() {
-    navigation.navigate('WorkoutStack', {
-      screen: 'ProgramDetail',
+    navigation.navigate("WorkoutStack", {
+      screen: "ProgramDetail",
       params: { programId: id },
     });
   }
@@ -22,7 +22,9 @@ function ProgramCard({ id, image, categories, title, time }) {
         ></Image>
         <View style={styles.detailContainer}>
           <View>
-            <Text style={styles.categoriesStyles}>{categories.join(", ")}</Text>
+            <Text style={styles.categoriesStyles}>
+              {categories?.join(", ")}
+            </Text>
           </View>
           <Text style={styles.titleStyle}>{title}</Text>
           <View style={styles.descriptionContainer}>

@@ -1,7 +1,20 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { db } from "../../config/firebase/firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { Alert } from "react-native";
+import { getAuth } from "firebase/auth";
 
 export const UserdataContext = createContext({
   addUserdata: (key, value) => {},
+  updateUserdata: () => {},
+  getUserdata: () => {},
   calculateIMT: () => {},
   calculateCalPerDay: () => {},
   calculateRecommendation: () => {},
@@ -42,12 +55,40 @@ function UserdataContextProvider({ children }) {
     calPerDayLose: 0,
   };
 
-  const [userdata, setUserdata] = useState(initialUserdata);
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-  function addUserdata(key, value) {
+  const [userdata, setUserdata] = useState(initialUserdata);
+  async function updateUserdata() {
+    try {
+      updateDoc(doc(db, "userdata", user.uid), userdata);
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }
+
+  async function getUserdata() {
+    try {
+      const data = await getDoc(doc(db, "userdata", user.uid));
+      const userdataRes = data.data();
+      setUserdata(userdataRes);
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }
+
+  // Get Current Data
+  useEffect(() => {
+    getUserdata();
+  }, []);
+
+  async function addUserdata(key, value) {
     setUserdata((currUserdata) => {
       return { ...currUserdata, [key]: value };
     });
+
+    // Update Userdata
+    updateUserdata();
   }
 
   function calculateIMT() {
@@ -121,11 +162,21 @@ function UserdataContextProvider({ children }) {
       newRecommendation[recommendation[i]] = true;
     }
 
-    addUserdata("recommendation", newRecommendation);
+    setUserdata((currUserdata) => {
+      return {
+        ...currUserdata,
+        ["recommendation"]: {
+          ...currUserdata.recommendation,
+          ...newRecommendation,
+        },
+      };
+    });
   }
 
   const value = {
     addUserdata: addUserdata,
+    updateUserdata: updateUserdata,
+    getUserdata: getUserdata,
     calculateIMT: calculateIMT,
     calculateCalPerDay: calculateCalPerDay,
     calculateRecommendation: calculateRecommendation,

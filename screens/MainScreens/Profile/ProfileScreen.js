@@ -1,11 +1,30 @@
 import Button from "../../../components/ui/buttons/Button";
-import { View, Image, StyleSheet, Text } from "react-native";
-import { useContext } from "react";
+import { View, Image, StyleSheet, Text, Alert } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../store/context/auth-context";
 import COLORS from "../../../constants/colors";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../config/firebase/firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 function ProfileScreen({ navigation }) {
   const userAuthCtx = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+  const isFocused = useIsFocused(); // Re-renders component on navigation
+
+  useEffect(() => {
+    try {
+      const getName = async () => {
+        const data = await getDoc(doc(db, "users", userAuthCtx.currentUid));
+        const usersData = data.data();
+        setUsername(usersData.name);
+      };
+      getName();
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }, [isFocused]);
+
   return (
     <>
       <Image
@@ -51,7 +70,7 @@ function ProfileScreen({ navigation }) {
                   color: "white",
                 }}
               >
-                Rita Sukaesih
+                {username}
               </Text>
             </View>
           </View>

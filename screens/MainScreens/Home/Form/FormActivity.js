@@ -34,7 +34,7 @@ function FormActivity() {
       style={{ flex: 1, backgroundColor: "white", justifyContent: "center"}}
     >
       <View style={styles.containerStyle}>
-        <Text style={styles.titleStyle}>{QUESTION[0]}</Text>
+        <Text style={styles.titleStyle}>{QUESTION[4]}</Text>
         <View>
           <Pressable onPress={questionOneHandler.bind(this, 1)}>
             <View

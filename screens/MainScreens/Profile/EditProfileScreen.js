@@ -1,23 +1,44 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, Alert } from "react-native";
+import { useContext, useState, useEffect } from "react";
 import Button from "../../../components/ui/buttons/Button";
-import ButtonNoOutline from "../../../components/ui/buttons/ButtonNoOutline";
 import InputField from "../../../components/ui/InputField";
 import COLORS from "../../../constants/colors";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../../config/firebase/firebase";
+import { AuthContext } from "../../../store/context/auth-context";
 
 function EditProfileScreen() {
   // Have to set input field to user data (in db) on load
+  const authCtx = useContext(AuthContext);
+  const [isClicked, setIsClicked] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    try {
+      const getName = async () => {
+        const data = await getDoc(doc(db, "users", authCtx.currentUid));
+        const usersData = data.data();
+        setProfile(usersData);
+      };
+      getName();
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }, []);
+
+  async function updateUserdata() {
+    if (profile) {
+      try {
+        updateDoc(doc(db, "users", authCtx.currentUid), profile);
+      } catch (e) {
+        Alert.alert(e.message);
+      }
+    }
+  }
+
   const initialUserdata = {
     name: {
-      value: "",
-      isValid: true,
-    },
-    phoneNum: {
-      value: "",
-      isValid: true,
-    },
-    email: {
-      value: "",
+      value: profile?.name,
       isValid: true,
     },
   };
@@ -28,13 +49,23 @@ function EditProfileScreen() {
     name: {
       isFocused: false,
     },
-    phoneNum: {
-      isFocused: false,
-    },
-    email: {
-      isFocused: false,
-    },
   });
+
+  useEffect(() => {
+    setInputs((currentInputs) => {
+      return {
+        ...currentInputs,
+        ["name"]: {
+          ...currentInputs.name,
+          ["value"]: profile?.name,
+        },
+      };
+    });
+  }, [profile]);
+
+  useEffect(() => {
+    updateUserdata();
+  }, [isClicked]);
 
   function onChangeHandler(inputCtg, enteredValue) {
     setInputs((currentInputs) => {
@@ -66,44 +97,34 @@ function EditProfileScreen() {
   function submitHandler() {
     const submitData = {
       name: inputs.name.value,
-      phoneNum: inputs.phoneNum.value,
-      email: inputs.email.value,
     };
 
-    // Also need to check for email and pass through backend
     const nameIsValid = submitData.name.length > 0;
-    const phoneNumIsValid = /^(\+62|62|0)8[1-9][0-9]{6,9}$/.test(
-      submitData.phoneNum
-    );
-    const emailIsValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-      submitData.email
-    );
 
-    if (!nameIsValid || !emailIsValid || !phoneNumIsValid) {
+    if (!nameIsValid) {
       setInputs((currentInputs) => {
         return {
           name: {
             value: currentInputs.name.value,
             isValid: nameIsValid,
           },
-          phoneNum: {
-            value: currentInputs.phoneNum.value,
-            isValid: phoneNumIsValid,
-          },
-          email: {
-            value: currentInputs.email.value,
-            isValid: emailIsValid,
-          },
         };
       });
       return;
     }
 
-    // Update Here
-    console.log("User Profile Updated");
+    setProfile((prevState) => {
+      return {
+        ...prevState,
+        ["name"]: submitData.name,
+      };
+    });
 
-    // Add Loading
-    console.log("Loading");
+    setIsClicked((prevState) => {
+      const newState = !prevState;
+      return newState;
+    });
+    Alert.alert("Nama Sukses Diubah");
   }
 
   return (
@@ -124,40 +145,6 @@ function EditProfileScreen() {
             onFocus={onFocusHandler.bind(this, "name")}
             onBlur={onBlurHandler.bind(this, "name")}
             focusState={inputIsFocused.name.isFocused}
-          />
-        </View>
-        <View
-          style={[
-            styles.inputContainer,
-            inputIsFocused.phoneNum.isFocused && styles.focusedContainer,
-            !inputs.phoneNum.isValid && styles.invalidContainer,
-          ]}
-        >
-          <Text>Nomor HP</Text>
-          <InputField
-            placeholder="Nomor HP"
-            onChangeText={onChangeHandler.bind(this, "phoneNum")}
-            value={inputs.phoneNum.value}
-            onFocus={onFocusHandler.bind(this, "phoneNum")}
-            onBlur={onBlurHandler.bind(this, "phoneNum")}
-            focusState={inputIsFocused.phoneNum.isFocused}
-          />
-        </View>
-        <View
-          style={[
-            styles.inputContainer,
-            inputIsFocused.email.isFocused && styles.focusedContainer,
-            !inputs.email.isValid && styles.invalidContainer,
-          ]}
-        >
-          <Text>Alamat E-mail</Text>
-          <InputField
-            placeholder="E-mail"
-            onChangeText={onChangeHandler.bind(this, "email")}
-            value={inputs.email.value}
-            onFocus={onFocusHandler.bind(this, "email")}
-            onBlur={onBlurHandler.bind(this, "email")}
-            focusState={inputIsFocused.email.isFocused}
           />
         </View>
         <View

@@ -1,15 +1,17 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Button from "../../../../components/ui/buttons/Button";
 import WorkoutCard from "../../../../components/ui/cards/WorkoutCard";
-import { WORKOUTS } from "../../../../data/dummy-data";
 import COLORS from "../../../../constants/colors";
 import WORKOUTFILTER from "../../../../constants/filters";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import { DataContext } from "../../../../store/context/data-context";
 
 function WorkoutList({ route }) {
   let filtersObj;
   let filters;
   const navigation = useNavigation();
+  const dataCtx = useContext(DataContext);
   if (route.params) {
     filtersObj = route.params;
     filters = WORKOUTFILTER.filter((filter) => {
@@ -88,7 +90,7 @@ function WorkoutList({ route }) {
           Olahraga
         </Text>
         <FlatList
-          data={WORKOUTS}
+          data={dataCtx.WORKOUTS}
           keyExtractor={(workout) => workout.id}
           renderItem={renderWorkoutItem}
         />

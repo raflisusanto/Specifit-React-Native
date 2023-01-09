@@ -1,62 +1,126 @@
 import { createContext, useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth, db } from "../../config/firebase/firebase";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { Alert } from "react-native";
+import { serverTimestamp, setDoc, doc } from "firebase/firestore";
 
 export const AuthContext = createContext({
   isLoggedIn: null,
-  loginHandler: () => {},
+  currentUid: null,
+  loginHandler: (email, password) => {},
+  signUpHandler: (email, password) => {},
   logoutHandler: () => {},
 });
 
 function AuthContextProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [uid, setUid] = useState(null);
 
   useEffect(() => {
-    const bootstrapAsync = async () => {
-      let storedUserInfo;
-      try {
-        storedUserInfo = await AsyncStorage.getItem("isLoggedIn");
-        if (storedUserInfo === "1") {
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (e) {
-        console.log("Error, Session not Found");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setUid(user.uid);
+      } else {
+        setIsLoggedIn(false);
+        setUid(null);
       }
-    };
-    bootstrapAsync();
+    });
+
+    return unsubscribe;
   }, []);
 
-  function loginHandler() {
-    const loginAsync = async () => {
-      try {
-        await AsyncStorage.setItem("isLoggedIn", "1");
+  function loginHandler(email, password) {
+    // Firebase Auth
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
         setIsLoggedIn(true);
-      } catch (e) {
-        console.log("Error Setting Item");
-        console.log(e);
-      }
-    };
-    loginAsync();
+        const user = userCredentials.user;
+        console.log("Logged in with:", user.email);
+      })
+      .catch((e) => Alert.alert(e.message));
+  }
+
+  async function initializeDb(userId, name, email) {
+    try {
+      // Initialize Database
+      await setDoc(doc(db, "users", userId), {
+        email: email,
+        name: name,
+        timeStamp: serverTimestamp(),
+      })
+
+      await setDoc(doc(db, "userdata", userId), {
+        gender: "",
+        age: "",
+        height: "",
+        weight: "",
+        activity: "",
+        medicalCondition: "",
+        isFilled: false,
+        recommendation: {
+          loseweight: false,
+          gainweight: false,
+          agility: false,
+          fatburn: false,
+          strength: false,
+          calist: false,
+          gemuk: false,
+          normal: false,
+          kurus: false,
+          injury: false,
+          item: false,
+          recommend: false,
+          sevendays: false,
+          fourteendays: false,
+          morefourteen: false,
+        },
+        imt: 0,
+        imtStatus: "",
+        calPerDayHold: 0,
+        calPerDayLose: 0,
+      });
+
+      await setDoc(doc(db, "programstatus", userId), {
+        programid: [],
+        statusDay: {},
+        bookmark: [],
+      });
+    } catch (e) {
+      Alert.alert(e.message);
+    }
+  }
+
+  async function signUpHandler(name, email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        initializeDb(userCredentials.user.uid, name, email);
+        const user = userCredentials.user;
+        console.log("Registered with:", user.email);
+      })
+      .catch((e) => Alert.alert(e.message));
   }
 
   function logoutHandler() {
-    const logoutAsync = async () => {
-      try {
-        await AsyncStorage.removeItem("isLoggedIn");
+    signOut(auth)
+      .then(() => {
         setIsLoggedIn(false);
-      } catch (e) {
-        console.log("Error Removing Item");
-      }
-    };
-    logoutAsync();
+      })
+      .catch((e) => Alert.alert(e.message));
   }
 
   const value = {
     isLoggedIn: isLoggedIn,
+    currentUid: uid,
     loginHandler: loginHandler,
+    signUpHandler: signUpHandler,
     logoutHandler: logoutHandler,
-  }
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

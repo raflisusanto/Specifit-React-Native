@@ -1,16 +1,20 @@
 import { PROGRAMS } from "../../../data/dummy-data";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "../../../components/ui/buttons/Button";
 import ReadMore from "@fawazahmed/react-native-read-more";
 import COLORS from "../../../constants/colors";
 import DayButton from "../../../components/ui/buttons/DayButton";
 import Card from "../../../components/ui/cards/Card";
 import WorkoutScheduleCard from "../../../components/ui/cards/WorkoutScheduleCard";
+import { DataContext } from "../../../store/context/data-context";
+import { ProgramContext } from "../../../store/context/program-context";
 
 function OnGoingWorkout({ route }) {
+  const dataCtx = useContext(DataContext);
+  const programCtx = useContext(ProgramContext);
   const programId = route.params.programId;
-  const selectedProgram = PROGRAMS.find((program) => program.id === programId);
+  const selectedProgram = dataCtx.PROGRAMS.find((program) => program.id === programId);
   const [isActiveIndex, setIsActiveIndex] = useState(0);
   const initialStatusDay = selectedProgram.statusDayList;
   const [statusDayList, setStatusDayList] = useState(initialStatusDay);
@@ -30,6 +34,9 @@ function OnGoingWorkout({ route }) {
       currentList[isActiveIndex] = item;
       return currentList;
     });
+
+    // Update DB 
+    programCtx.updateUserProgramStatus();
   }
 
   function onPressHandler(activeIdx) {

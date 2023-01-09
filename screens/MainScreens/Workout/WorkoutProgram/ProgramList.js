@@ -1,15 +1,18 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Button from "../../../../components/ui/buttons/Button";
 import ProgramCard from "../../../../components/ui/cards/ProgramCard";
-import { PROGRAMS } from "../../../../data/dummy-data";
 import COLORS from "../../../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import PROGRAMFILTER from "../../../../constants/program-filters";
+import { useContext } from "react";
+import { DataContext } from "../../../../store/context/data-context";
 
 function ProgramList({ route }) {
   let filtersObj;
   let filters;
   const navigation = useNavigation();
+  const dataCtx = useContext(DataContext);
+  
   if (route.params) {
     filtersObj = route.params;
     filters = PROGRAMFILTER.filter((filter) => {
@@ -87,7 +90,7 @@ function ProgramList({ route }) {
         </Text>
         <View style={{ flex: 1, marginTop: 10 }}>
           <FlatList
-            data={PROGRAMS}
+            data={dataCtx.PROGRAMS}
             keyExtractor={(program) => program.id}
             renderItem={renderWorkoutItem}
           />
