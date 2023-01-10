@@ -2,7 +2,7 @@ import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useContext } from "react";
 import ProgramCard from "../../../components/ui/cards/ProgramCard";
 import { ProgramContext } from "../../../store/context/program-context";
-import { PROGRAMS } from "../../../data/dummy-data";
+import { DataContext } from "../../../store/context/data-context";
 
 function sum(arr) {
   let sum = 0;
@@ -13,14 +13,17 @@ function sum(arr) {
 }
 
 function HistoryScreen() {
-  const programCtx = useContext(ProgramContext);
+  const dataCtx = useContext(DataContext);
 
   function checkDoneProgram() {
-    const listDone = PROGRAMS.filter((program) => {
-      if (programCtx.programList.includes(program.id) && sum(program.statusDayList) / program.ctgList.length * 100 === 100) {
+    const listDone = dataCtx.PROGRAMS.filter((program) => {
+      if (
+        dataCtx.STATUS?.programid.includes(program.id) &&
+        (sum(program.statusDayList) / program.ctgList.length) * 100 === 100
+      ) {
         return program;
       }
-    })
+    });
 
     if (listDone.length > 0) {
       return true;
@@ -30,7 +33,7 @@ function HistoryScreen() {
 
   function renderProgramItem({ item }) {
     return (
-      programCtx.programList.includes(item.id) &&
+      dataCtx.STATUS?.programid.includes(item.id) &&
       (sum(item.statusDayList) / item.ctgList.length) * 100 === 100 && (
         <ProgramCard
           id={item.id}
@@ -48,7 +51,7 @@ function HistoryScreen() {
         <Text style={styles.titleStyle}>List Program yang Sudah Selesai</Text>
         {checkDoneProgram() ? (
           <FlatList
-            data={PROGRAMS}
+            data={dataCtx.PROGRAMS}
             keyExtractor={(item) => item.id}
             renderItem={renderProgramItem}
           />

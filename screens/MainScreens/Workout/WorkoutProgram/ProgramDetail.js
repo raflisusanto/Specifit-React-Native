@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   Pressable,
-  Alert,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -59,13 +58,11 @@ function ProgramDetail({ route }) {
   }
 
   useEffect(() => {
-    programCtx.updateProgramStatus();
-    programCtx.setUsedProgramIds(dataCtx.STATUS?.programid);
-    programCtx.setBookmarkedProgramIds(dataCtx.STATUS?.bookmark);
     dataCtx.getWorkoutData();
     dataCtx.getWorkoutProgramData();
     dataCtx.getTips();
     dataCtx.getProgramStatus();
+    programCtx.updateProgramStatus();
   }, [isFocused]);
 
   return (

@@ -1,10 +1,12 @@
+import { useContext } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import COLORS from "../../../constants/colors";
-import { TIPS } from "../../../data/dummy-data";
+import { DataContext } from "../../../store/context/data-context";
 
 function TipsScreen({ route }) {
   const tipsId = route.params.tipsId;
-  const selectedTips = TIPS.find((tips) => tips.id === tipsId);
+  const dataCtx = useContext(DataContext);
+  const selectedTips = dataCtx.TIPS.find((tips) => tips.id === tipsId);
   return (
     <View style={{ flex: 1 }}>
       <View style={[styles.sectionMargin, { marginTop: 90 }]}>

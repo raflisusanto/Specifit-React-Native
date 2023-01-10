@@ -1,11 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import { db } from "../../config/firebase/firebase";
 import {
-  addDoc,
-  collection,
   doc,
   getDoc,
-  getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { Alert } from "react-native";
@@ -157,7 +154,7 @@ function UserdataContextProvider({ children }) {
     }
 
     // Set Recommendation
-    let newRecommendation = initialProgramFilter;
+    let newRecommendation = {...initialProgramFilter};
     for (let i = 0; i < recommendation.length; i++) {
       newRecommendation[recommendation[i]] = true;
     }

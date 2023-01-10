@@ -6,18 +6,25 @@ import COLORS from "../../../constants/colors";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase/firebase";
 import { useIsFocused } from "@react-navigation/native";
+import { getAuth } from "firebase/auth";
 
 function ProfileScreen({ navigation }) {
   const userAuthCtx = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const isFocused = useIsFocused(); // Re-renders component on navigation
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   useEffect(() => {
     try {
       const getName = async () => {
-        const data = await getDoc(doc(db, "users", userAuthCtx.currentUid));
-        const usersData = data.data();
-        setUsername(usersData.name);
+        try {
+          const data = await getDoc(doc(db, "users", user.uid));
+          const usersData = data.data();
+          setUsername(usersData.name);
+        } catch (e) {
+          Alert.alert(e.message);
+        }
       };
       getName();
     } catch (e) {
@@ -70,7 +77,7 @@ function ProfileScreen({ navigation }) {
                   color: "white",
                 }}
               >
-                {username}
+                {username ? username : "User"}
               </Text>
             </View>
           </View>

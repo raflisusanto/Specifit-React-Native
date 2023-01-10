@@ -207,7 +207,7 @@ function DataContextProvider({ children }) {
         listTipsData[i].article,
         listTipsData[i].author,
         listTipsData[i].title,
-        listTipsData[i].date
+        listTipsData[i].date.toDate().toDateString()
       );
       objList.push(tips);
     }

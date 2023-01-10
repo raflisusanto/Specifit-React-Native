@@ -1,4 +1,3 @@
-import { PROGRAMS } from "../../../data/dummy-data";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { useState, useContext } from "react";
 import Button from "../../../components/ui/buttons/Button";

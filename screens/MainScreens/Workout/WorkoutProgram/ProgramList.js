@@ -4,15 +4,27 @@ import ProgramCard from "../../../../components/ui/cards/ProgramCard";
 import COLORS from "../../../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import PROGRAMFILTER from "../../../../constants/program-filters";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { DataContext } from "../../../../store/context/data-context";
+import { UserdataContext } from "../../../../store/context/userdata-context";
 
 function ProgramList({ route }) {
   let filtersObj;
   let filters;
   const navigation = useNavigation();
   const dataCtx = useContext(DataContext);
-  
+  const userdataCtx = useContext(UserdataContext);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (userdataCtx.userdata.isFilled) {
+      userdataCtx.calculateIMT();
+      userdataCtx.calculateCalPerDay();
+      userdataCtx.calculateRecommendation();
+    }
+  }, [isFocused, route]);
+
   if (route.params) {
     filtersObj = route.params;
     filters = PROGRAMFILTER.filter((filter) => {

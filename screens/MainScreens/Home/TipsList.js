@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
-import { TIPS } from "../../../data/dummy-data";
 import TipsCard from "../../../components/ui/cards/TipsCard";
+import { DataContext } from "../../../store/context/data-context";
 
 function TipsList() {
+  const dataCtx = useContext(DataContext);
   function renderTipsItem({ item }) {
     return (
       <TipsCard
@@ -18,7 +20,7 @@ function TipsList() {
       <View style={styles.container}>
         <Text style={styles.titleStyle}>Tips untuk Kamu</Text>
         <FlatList
-          data={TIPS}
+          data={dataCtx.TIPS}
           keyExtractor={(item) => item.id}
           renderItem={renderTipsItem}
         />
