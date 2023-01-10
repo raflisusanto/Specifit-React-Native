@@ -51,12 +51,14 @@ function ProgramContextProvider({ children }) {
   }
 
   const getProgramStatus = async () => {
-    try {
-      const data = await getDoc(doc(db, "programstatus", authCtx.currentUid));
-      const programStatus = data.data();
-      setProgramStatus(programStatus);
-    } catch (e) {
-      Alert.alert(e.message);
+    if (authCtx?.currentUid !== null) {
+      try {
+        const data = await getDoc(doc(db, "programstatus", authCtx.currentUid));
+        const programStatus = data.data();
+        setProgramStatus(programStatus);
+      } catch (e) {
+        Alert.alert(e.message);
+      }
     }
   };
 
@@ -83,7 +85,7 @@ function ProgramContextProvider({ children }) {
       };
 
       updateProgramStatus(sendData);
-      
+
       setProgramStatus((currStatus) => {
         return { ...currStatus, ...sendData };
       });

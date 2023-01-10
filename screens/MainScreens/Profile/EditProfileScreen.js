@@ -1,24 +1,28 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "../../../components/ui/buttons/Button";
 import InputField from "../../../components/ui/InputField";
 import COLORS from "../../../constants/colors";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase/firebase";
-import { AuthContext } from "../../../store/context/auth-context";
+import { getAuth } from "firebase/auth";
 
 function EditProfileScreen() {
-  // Have to set input field to user data (in db) on load
-  const authCtx = useContext(AuthContext);
   const [isClicked, setIsClicked] = useState(false);
   const [profile, setProfile] = useState(null);
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   useEffect(() => {
     try {
       const getName = async () => {
-        const data = await getDoc(doc(db, "users", authCtx.currentUid));
-        const usersData = data.data();
-        setProfile(usersData);
+        try {
+          const data = await getDoc(doc(db, "users", user.uid));
+          const usersData = data.data();
+          setProfile(usersData);
+        } catch (e) {
+          Alert.alert(e.message);
+        }
       };
       getName();
     } catch (e) {
@@ -29,7 +33,7 @@ function EditProfileScreen() {
   async function updateUserdata() {
     if (profile) {
       try {
-        updateDoc(doc(db, "users", authCtx.currentUid), profile);
+        updateDoc(doc(db, "users", user.uid), profile);
       } catch (e) {
         Alert.alert(e.message);
       }

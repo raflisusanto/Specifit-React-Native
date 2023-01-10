@@ -21,9 +21,9 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { UserdataContext } from "../../../store/context/userdata-context";
 import StatusCard from "../../../components/ui/cards/StatusCard";
 import { DataContext } from "../../../store/context/data-context";
-import { AuthContext } from "../../../store/context/auth-context";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase/firebase";
+import { getAuth } from "firebase/auth";
 
 function sum(arr) {
   let sum = 0;
@@ -39,10 +39,11 @@ function HomeScreen() {
   const programCtx = useContext(ProgramContext);
   const userdataCtx = useContext(UserdataContext);
   const dataCtx = useContext(DataContext);
-  const authCtx = useContext(AuthContext);
   const navigation = useNavigation();
   const isFocused = useIsFocused(); // Re-renders component on navigation
   const [username, setUsername] = useState("");
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   useEffect(() => {
     if (isFocused) {
@@ -58,9 +59,13 @@ function HomeScreen() {
   useEffect(() => {
     try {
       const getName = async () => {
-        const data = await getDoc(doc(db, "users", authCtx.currentUid));
-        const usersData = data.data();
-        setUsername(usersData.name);
+        try {
+          const data = await getDoc(doc(db, "users", user.uid));
+          const usersData = data.data();
+          setUsername(usersData.name);
+        } catch (e) {
+          Alert.alert(e.message);
+        }
       };
       getName();
     } catch (e) {
@@ -74,8 +79,8 @@ function HomeScreen() {
       dataCtx.getWorkoutData();
       dataCtx.getWorkoutProgramData();
       dataCtx.getTips();
-      dataCtx.getProgramStatus();
       programCtx.getProgramStatus();
+      dataCtx.getProgramStatus();
     }
   }, [isFocused]);
 
@@ -89,6 +94,13 @@ function HomeScreen() {
 
   function seeFormHandler() {
     navigation.navigate("FormScreen");
+  }
+
+  function seeRecommendationHandler() {
+    userdataCtx.calculateRecommendation();
+    navigation.navigate("ProgramList", {
+      ...userdataCtx.userdata.recommendation,
+    });
   }
 
   return (
@@ -114,7 +126,7 @@ function HomeScreen() {
               zIndex: 3,
             }}
           >
-            Halo, {username}
+            Halo, {username ? username : "User"}
           </Text>
         </View>
       </View>
@@ -229,11 +241,7 @@ function HomeScreen() {
                     backgroundColor: "white",
                   }}
                   textStyle={{ color: "black", fontSize: 12 }}
-                  onPress={() =>
-                    navigation.navigate("ProgramList", {
-                      ...userdataCtx.userdata.recommendation,
-                    })
-                  }
+                  onPress={seeRecommendationHandler}
                 />
               </View>
             </Card>
