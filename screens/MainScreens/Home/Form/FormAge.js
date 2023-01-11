@@ -78,7 +78,6 @@ function FormAge() {
 
   function nextPageHandler(submitData) {
     userdataCtx.addUserdata("age", submitData.age);
-    console.log(submitData.age);
     navigation.navigate("FormHeight");
   }
 
