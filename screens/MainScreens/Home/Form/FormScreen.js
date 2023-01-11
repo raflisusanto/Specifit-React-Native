@@ -18,7 +18,7 @@ function FormScreen() {
           source={require("../../../../assets/images/element_form.png")}
           style={styles.imgStyle}
         ></Image>
-        <Text style={styles.titleStyle}>Halo, Rita</Text>
+        <Text style={styles.titleStyle}>Halo</Text>
         <Text style={styles.descStyle}>{descText}</Text>
         <Button
           text="Mulai"

@@ -31,6 +31,7 @@ function FormMedical() {
     userdataCtx.calculateIMT();
     userdataCtx.calculateCalPerDay();
     userdataCtx.calculateRecommendation();
+    userdataCtx.calculateRecommendation();
 
     navigation.navigate("Home");
   }

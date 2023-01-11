@@ -78,7 +78,6 @@ function FormHeight() {
 
   function nextPageHandler(submitData) {
     userdataCtx.addUserdata("height", submitData.height);
-    console.log(submitData.height);
     navigation.navigate("FormWeight");
   }
 
