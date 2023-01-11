@@ -78,7 +78,6 @@ function FormWeight() {
 
   function nextPageHandler(submitData) {
     userdataCtx.addUserdata("weight", submitData.weight);
-    console.log(submitData.weight);
     navigation.navigate("FormActivity");
   }
 

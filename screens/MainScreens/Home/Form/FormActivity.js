@@ -26,6 +26,9 @@ function FormActivity() {
       return;
     }
     userdataCtx.addUserdata("activity", isActive);
+    userdataCtx.calculateCalPerDay();
+    userdataCtx.calculateIMT();
+    userdataCtx.calculateRecommendation();
     navigation.navigate("FormMedical");
   }
 
