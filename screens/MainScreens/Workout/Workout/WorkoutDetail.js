@@ -11,7 +11,9 @@ function WorkoutDetail({ route }) {
   return (
     <>
       <Image
-        source={require("../../../../assets/images/workout_1.png")}
+        source={{
+          uri: selectedWorkout.img,
+        }}
         style={styles.staticImage}
       ></Image>
       <ScrollView style={{ flex: 1 }}>

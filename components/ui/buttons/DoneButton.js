@@ -18,14 +18,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.primary,
-    paddingHorizontal: 16,
     paddingVertical: 10,
+    paddingHorizontal: 24,
     borderRadius: 5,
-    marginRight: 100,
   },
   textStyle: {
     color: "white",
     fontFamily: "OpenSans_700Bold",
-    fontSize: 14,
+    fontSize: 12,
   },
 });
