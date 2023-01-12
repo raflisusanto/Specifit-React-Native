@@ -41,7 +41,6 @@ function AuthContextProvider({ children }) {
       .then((userCredentials) => {
         setIsLoggedIn(true);
         const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
       })
       .catch((e) => Alert.alert(e.message));
   }
@@ -101,7 +100,6 @@ function AuthContextProvider({ children }) {
       .then((userCredentials) => {
         initializeDb(userCredentials.user.uid, name, email);
         const user = userCredentials.user;
-        console.log("Registered with:", user.email);
       })
       .catch((e) => Alert.alert(e.message));
   }

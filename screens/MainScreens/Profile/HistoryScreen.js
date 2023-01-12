@@ -19,7 +19,7 @@ function HistoryScreen() {
     const listDone = dataCtx.PROGRAMS.filter((program) => {
       if (
         dataCtx.STATUS?.programid.includes(program.id) &&
-        (sum(program.statusDayList) / program.ctgList.length) * 100 === 100
+        (sum(program.statusDayList) / program.statusDayList.length) * 100 === 100
       ) {
         return program;
       }
@@ -34,7 +34,7 @@ function HistoryScreen() {
   function renderProgramItem({ item }) {
     return (
       dataCtx.STATUS?.programid.includes(item.id) &&
-      (sum(item.statusDayList) / item.ctgList.length) * 100 === 100 && (
+      (sum(item.statusDayList) / item.statusDayList.length) * 100 === 100 && (
         <ProgramCard
           id={item.id}
           image={item.img}

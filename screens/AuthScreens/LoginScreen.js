@@ -69,7 +69,7 @@ function LoginScreen({ navigation }) {
     const emailIsValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
       submitData.email
     );
-    const passIsValid = submitData.password.length > 10;
+    const passIsValid = submitData.password.length > 4;
 
     if (!emailIsValid || !passIsValid) {
       setInputs((currentInputs) => {
@@ -88,11 +88,7 @@ function LoginScreen({ navigation }) {
     }
 
     // Log User In Here
-    console.log("User Logged In");
     userAuthCtx.loginHandler(submitData.email, submitData.password);
-
-    // Add Loading
-    console.log('Loading');
   }
 
   return (

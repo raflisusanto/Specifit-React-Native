@@ -24,7 +24,7 @@ function OnGoingWorkoutList() {
           title={item.title}
           categories={item.ctgList}
           percentage={
-            (sum(item.statusDayList) / item.ctgList.length) * 100
+            (sum(item.statusDayList) / item.statusDayList.length) * 100
           }
           key={item.id}
         />

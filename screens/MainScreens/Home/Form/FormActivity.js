@@ -65,7 +65,7 @@ function FormActivity() {
               </Text>
             </View>
           </Pressable>
-          <Pressable onPress={questionOneHandler.bind(this, 2)}>
+          <Pressable onPress={questionOneHandler.bind(this, 3)}>
             <View
               style={isActive === 3 ? styles.activeStyle : styles.defaultStyle}
             >
@@ -78,7 +78,7 @@ function FormActivity() {
               </Text>
             </View>
           </Pressable>
-          <Pressable onPress={questionOneHandler.bind(this, 2)}>
+          <Pressable onPress={questionOneHandler.bind(this, 4)}>
             <View
               style={isActive === 4 ? styles.activeStyle : styles.defaultStyle}
             >
